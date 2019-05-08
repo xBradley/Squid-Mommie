@@ -1,0 +1,31 @@
+{ 
+    
+    "squid": [
+        
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   30, 150  ,  50, 140  ,  70, 170  ,  80, 200  ,  30, 200  ]
+        } ,
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   130, 110  ,  100, 20  ,  150, 80  ,  150, 110  ]
+        } ,
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   110, 160  ,  130, 110  ,  150, 200  ,  120, 200  ]
+        } ,
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   20, 80  ,  80, 20  ,  100, 20  ,  50, 110  ,  30, 110  ]
+        } ,
+        {
+            "density": 2, "friction": 0, "bounce": 0, 
+            "filter": { "categoryBits": 1, "maskBits": 65535 },
+            "shape": [   70, 170  ,  50, 140  ,  50, 110  ,  100, 20  ,  130, 110  ,  110, 160  ]
+        }
+    ]
+}
