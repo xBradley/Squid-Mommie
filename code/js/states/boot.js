@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------//
 var Boot = function(game) {};
 Boot.prototype = {
+	//Load all assets
 	preload: function() {
 		game.load.path = "assets/img/";
 		game.load.image("bg", "background.png");
@@ -16,6 +17,7 @@ Boot.prototype = {
 		game.load.physics("squidPhysics", "squid.json");
 	},
 	
+	//Boot-up screen
 	create: function() {
 		console.log("Boot");
 		
