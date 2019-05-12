@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------//
 var Menu = function(game) {};
 Menu.prototype = {
-	//Menu screen
+	//Menu screen  
 	create: function() {
 		console.log("Menu");
 		
