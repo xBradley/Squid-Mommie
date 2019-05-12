@@ -10,7 +10,7 @@
 var config = {
 	width: 600,
 	height: 600,
-	renderer: Phaser.AUTO,
+	renderer: Phaser.CANVAS, 
 }
 
 //Create new instance of a game

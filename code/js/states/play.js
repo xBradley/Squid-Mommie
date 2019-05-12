@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------//
 //Squid Mommie														   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
-//		play.js													   //
+//		play.js													   	   //
 //---------------------------------------------------------------------//
 
 "use strict";
@@ -18,6 +18,8 @@ Play.prototype = {
 
 		//background
 		game.add.sprite(0,0, "bg");
+		
+		game.world.setBounds(0,0, 1600, 1600);
 		
 		//p2 physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
@@ -48,7 +50,7 @@ Play.prototype = {
 		
 		
 		//add player character (mommie)
-		this.mommie = new player(game, game.world.centerX, game.world.centerY - 100, "squid");
+		this.mommie = new player(game, 200, 200, "squid");
 		game.add.existing(this.mommie);
 		
 		//spawn babbie and add to group (babbies) 
@@ -66,6 +68,8 @@ Play.prototype = {
 		this.arrowTimer.loop(3000, function() {this.arrow.kill();}, this);
 		this.arrowTimer.start();
 		
+		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
+		
 	},
 	
 	//Play update loop
@@ -82,6 +86,7 @@ Play.prototype = {
 										    nearest.position.x, 
 											nearest.position.y)
 			: distance = undefined;
+		
 		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
@@ -111,6 +116,7 @@ Play.prototype = {
 				nearest.body.force.y = Math.sin(angle) * 10000;
 			}
 		}
+		  
 		
 		//arrow is fixed on player
 		this.arrow.position.x = player.position.x + 20;
@@ -119,6 +125,16 @@ Play.prototype = {
 		//if distance is less than 50, eat baby
 		if (distance != undefined && distance <= 50)
 			this.collectBaby(nearest);
+	},
+	
+	render: function() {
+		game.debug.cameraInfo(game.camera, 32, 32);
+		game.debug.spriteCoords(this.mommie, 32, 500);
+		game.debug.pointer(game.input.activePointer);
+		
+		//var zone = game.camera.deadzone;
+		//game.context.fillStyle = "rgba(0,0,255,0.5)";
+		//game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
 	},
 	
 	//spawn baby, add to world, add to group
