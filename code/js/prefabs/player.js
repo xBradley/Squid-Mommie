@@ -8,6 +8,10 @@
 //---------------------------------------------------------------------//
 function player(_game, _x, _y, _key) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
+
+	//Adding swim SFX
+	var swim;
+	this.swim = game.add.audio('swim');
 	
 	//set size and anchor
 	this.anchor.setTo(0.5);
@@ -40,7 +44,7 @@ function player(_game, _x, _y, _key) {
 	
 		//clamp range to 2PI to -2PI
 		deltaMouseRad %= Math.PI * 2;
-		
+
 		//offset by 2PI
 		if (deltaMouseRad !=  deltaMouseRad % Math.PI) {
 			deltaMouseRad = (deltaMouseRad < 0) 

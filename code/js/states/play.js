@@ -11,13 +11,41 @@ Play.prototype = {
 	//Play screen
 	create: function() {
 		console.log("Play");
-		
+		//playing main theme
+		var theme;
+		this.theme = game.add.audio('theme');
+		this.theme.loopFull();
+
 		//background
 		game.add.sprite(0,0, "bg");
 		
 		//p2 physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
 		game.physics.p2.gravity.y = 0;
+
+		//Creating map -Matt
+		
+		//This here is a map in progress
+		/*var map; //I don't know a better place to declare these variable -Matt
+		var backgroundLayer;
+		var decorationsLayer;
+		var wallLayer;
+		this.map = game.add.tilemap('world');
+		this.map.addTilesetImage('caves', 'caveTiles'); // 'caves' is referring to the tilesets in the 'depths.json' file.
+		this.map.setCollisionByExclusion([]);
+		this.wallLayer = this.map.createLayer('walls'); //this part referes to the 'walls' layer in our map json file.
+		//this.wallLayer.resizeWorld(); //This isn't working very well :(
+		*/
+
+		//This is for the origional map I made that will probably work for testing.
+		this.map = game.add.tilemap('globe');
+		this.map.addTilesetImage('ForgottenDungeon', 'dungeon');
+		this.map.addTilesetImage('construction_tileset', 'metal');
+		this.map.setCollisionByExclusion([]);
+		this.backgroundLayer = this.map.createLayer('Background');
+		this.wallLayer = this.map.createLayer('Walls');
+		//End of map creation -Matt
+		
 		
 		//add player character (mommie)
 		this.mommie = new player(game, game.world.centerX, game.world.centerY - 100, "squid");
