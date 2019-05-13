@@ -43,14 +43,17 @@ Play.prototype = {
 		this.map = game.add.tilemap('globe');
 		this.map.addTilesetImage('ForgottenDungeon', 'dungeon');
 		this.map.addTilesetImage('construction_tileset', 'metal');
-		this.map.setCollisionByExclusion([]);
 		this.backgroundLayer = this.map.createLayer('Background');
 		this.wallLayer = this.map.createLayer('Walls');
+		this.map.setCollisionByExclusion([], true, this.wallLayer);
+		game.physics.p2.enable(this.map, true);
+
+
 		//End of map creation -Matt
 		
 		
 		//add player character (mommie)
-		this.mommie = new player(game, 200, 200, "squid");
+		this.mommie = new player(game, 300, 300, "squid");
 		game.add.existing(this.mommie);
 		
 		//spawn babbie and add to group (babbies) 
@@ -77,7 +80,7 @@ Play.prototype = {
 		var nearest = this.findNearest();			//finds nearest babbie
 		var player = this.mommie;					//shortcut for mommie
 		var distance;								//distance variable
-		
+
 		//if nearest is defined, find distance from player to nearest
 		//else distance is undefined
 		(nearest != null) ? 
