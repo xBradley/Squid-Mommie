@@ -105,6 +105,12 @@ player.prototype.update = function() {
 		this.body.velocity.y += 10;
 	else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
 		this.body.velocity.y -= 10;
+	else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
+		this.body.velocity.x += 10;
+	else if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
+		this.body.velocity.x -= 10;
+	
+
 	
 	
 	
