@@ -10,14 +10,15 @@ var Play = function(game) {};
 Play.prototype = {
 	//Play screen
 	create: function() {
-		console.log("Play");
+		//console.log("Play");
 		//playing main theme
 		var theme;
 		this.theme = game.add.audio('theme');
 		this.theme.loopFull();
 
 		//background
-		game.add.sprite(0,0, "bg");
+		game.stage.backgroundColor = "#000000";
+		//game.add.sprite(0,0, "bg");
 		
 		game.world.setBounds(0,0, 1600, 1600);
 		
@@ -55,9 +56,6 @@ Play.prototype = {
         var wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
         
 
-
-
-
 		//End of map creation -Matt
 		
 		
@@ -67,8 +65,11 @@ Play.prototype = {
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(40, 40);
-		this.spawnBaby();
+		this.spawnBaby(1030, 315);
+		//this.spawnBaby(600,800);
+		this.spawnBaby(1135,1540);
+		this.spawnBaby(621,1530);
+		this.spawnBaby(412,1140);
 		
 		//add arrow sprite for guidance 
 		this.arrow = game.add.sprite(200, 200, "arrow");
@@ -102,9 +103,9 @@ Play.prototype = {
 		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
-			//if not babbies are alive do final sing
+			//if no babbies are alive do final sing
 			if (this.babbies.countLiving() == 0)
-				game.state.start("Play", true, false);
+				game.state.start("Boot", true, true);
 			
 			var angle;								//angle variable
 			//if distance is greater than 200,
@@ -140,9 +141,9 @@ Play.prototype = {
 	},
 	
 	render: function() {
-		game.debug.cameraInfo(game.camera, 32, 32);
-		game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.cameraInfo(game.camera, 32, 32);
+		//game.debug.spriteCoords(this.mommie, 32, 500);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = game.camera.deadzone;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";

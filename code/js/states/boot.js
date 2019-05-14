@@ -42,7 +42,7 @@ Boot.prototype = {
 	
 	//Boot-up screen
 	create: function() {
-		console.log("Boot");
+		//console.log("Boot");
 		
 		game.stage.backgroundColor = "#deface";
 		game.state.start("Menu", true, false);

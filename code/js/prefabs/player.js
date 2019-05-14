@@ -102,13 +102,13 @@ player.prototype.update = function() {
 	this.moveToPointerOnClick();
 	
 	if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
-		this.body.velocity.y += 10;
+		this.body.velocity.y += 5;
 	else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
-		this.body.velocity.y -= 10;
+		this.body.velocity.y -= 5;
 	else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-		this.body.velocity.x += 10;
+		this.body.velocity.x += 5;
 	else if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-		this.body.velocity.x -= 10;
+		this.body.velocity.x -= 5;
 	
 
 	
