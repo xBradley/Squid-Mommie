@@ -1,3 +1,6 @@
 # Ignore This
 .DS_Store
 framework/
+*.md
+.github/
+LICENSE
