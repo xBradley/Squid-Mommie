@@ -23,6 +23,7 @@ Play.prototype = {
 		
 		//p2 physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
+	    game.physics.p2.setImpactEvents(true); //added in the desperate attempt to make the map work
 		game.physics.p2.gravity.y = 0;
 
 		//Creating map -Matt
@@ -46,7 +47,15 @@ Play.prototype = {
 		this.backgroundLayer = this.map.createLayer('Background');
 		this.wallLayer = this.map.createLayer('Walls');
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
-		game.physics.p2.enable(this.map, true);
+		this.wallLayer.resizeWorld();
+
+		//adding wall physics
+        game.physics.p2.convertTilemap(this.map, this.wallLayer);
+        this.wallCollisionsGroup = game.physics.p2.createCollisionGroup();
+        var wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
+        
+
+
 
 
 		//End of map creation -Matt
