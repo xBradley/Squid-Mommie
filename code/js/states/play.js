@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie														   //
+//Squid Mommie - Alpha												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		play.js													   	   //
 //---------------------------------------------------------------------//
@@ -10,25 +10,66 @@ var Play = function(game) {};
 Play.prototype = {
 	//Play screen
 	create: function() {
-		console.log("Play");
-		
+		//console.log("Play");
+		//playing main theme
+		var theme;
+		this.theme = game.add.audio('theme');
+		this.theme.loopFull();
+
 		//background
-		game.add.sprite(0,0, "bg");
+		game.stage.backgroundColor = "#000000";
+		//game.add.sprite(0,0, "bg");
 		
 		game.world.setBounds(0,0, 1600, 1600);
 		
 		//p2 physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
+	    game.physics.p2.setImpactEvents(true); //added in the desperate attempt to make the map work
 		game.physics.p2.gravity.y = 0;
+
+		//Creating map -Matt
+		
+		//This here is a map in progress
+		/*var map; //I don't know a better place to declare these variable -Matt
+		var backgroundLayer;
+		var decorationsLayer;
+		var wallLayer;
+		this.map = game.add.tilemap('world');
+		this.map.addTilesetImage('caves', 'caveTiles'); // 'caves' is referring to the tilesets in the 'depths.json' file.
+		this.map.setCollisionByExclusion([]);
+		this.wallLayer = this.map.createLayer('walls'); //this part referes to the 'walls' layer in our map json file.
+		//this.wallLayer.resizeWorld(); //This isn't working very well :(
+		*/
+
+		//This is for the origional map I made that will probably work for testing.
+		this.map = game.add.tilemap('globe');
+		this.map.addTilesetImage('ForgottenDungeon', 'dungeon');
+		this.map.addTilesetImage('construction_tileset', 'metal');
+		this.backgroundLayer = this.map.createLayer('Background');
+		this.wallLayer = this.map.createLayer('Walls');
+		this.map.setCollisionByExclusion([], true, this.wallLayer);
+		this.wallLayer.resizeWorld();
+
+		//adding wall physics
+        game.physics.p2.convertTilemap(this.map, this.wallLayer);
+        this.wallCollisionsGroup = game.physics.p2.createCollisionGroup();
+        var wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
+        
+
+		//End of map creation -Matt
+		
 		
 		//add player character (mommie)
-		this.mommie = new player(game, 200, 200, "squid");
+		this.mommie = new player(game, 300, 300, "squid");
 		game.add.existing(this.mommie);
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(40, 40);
-		this.spawnBaby();
+		this.spawnBaby(1030, 315);
+		//this.spawnBaby(600,800);
+		this.spawnBaby(1135,1540);
+		this.spawnBaby(621,1530);
+		this.spawnBaby(412,1140);
 		
 		//add arrow sprite for guidance 
 		this.arrow = game.add.sprite(200, 200, "arrow");
@@ -49,7 +90,7 @@ Play.prototype = {
 		var nearest = this.findNearest();			//finds nearest babbie
 		var player = this.mommie;					//shortcut for mommie
 		var distance;								//distance variable
-		
+
 		//if nearest is defined, find distance from player to nearest
 		//else distance is undefined
 		(nearest != null) ? 
@@ -62,9 +103,9 @@ Play.prototype = {
 		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
-			//if not babbies are alive do final sing
+			//if no babbies are alive do final sing
 			if (this.babbies.countLiving() == 0)
-				game.state.start("Play", true, false);
+				game.state.start("Gameover", true, false);
 			
 			var angle;								//angle variable
 			//if distance is greater than 200,
@@ -100,9 +141,9 @@ Play.prototype = {
 	},
 	
 	render: function() {
-		game.debug.cameraInfo(game.camera, 32, 32);
-		game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.cameraInfo(game.camera, 32, 32);
+		//game.debug.spriteCoords(this.mommie, 32, 500);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = game.camera.deadzone;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";

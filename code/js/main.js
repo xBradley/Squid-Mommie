@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie														   //
+//Squid Mommie - Alpha					   						       //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		main.js														   //
 //---------------------------------------------------------------------//
@@ -21,6 +21,7 @@ window.onload = function() {
 	game.state.add("Boot", Boot);
 	game.state.add("Menu", Menu);
 	game.state.add("Play", Play);
+	game.state.add("Gameover", Gameover);
 	game.state.start("Boot", true, true);
 }
 //---------------------------------------------------------------------//
