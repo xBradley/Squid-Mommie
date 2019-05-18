@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------//
-//Squid Mommie														   //
+//Squid Mommie - Alpha												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
-//		mommie.js													   //
+//		babySquid.js												   //
 //---------------------------------------------------------------------//
 
 "use strict";

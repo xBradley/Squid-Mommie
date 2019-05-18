@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie														   //
+//Squid Mommie - Alpha												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		play.js													   	   //
 //---------------------------------------------------------------------//
@@ -105,7 +105,7 @@ Play.prototype = {
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
 			//if no babbies are alive do final sing
 			if (this.babbies.countLiving() == 0)
-				game.state.start("Boot", true, true);
+				game.state.start("Gameover", true, false);
 			
 			var angle;								//angle variable
 			//if distance is greater than 200,

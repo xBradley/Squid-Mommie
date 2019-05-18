@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie														   //
+//Squid Mommie - Alpha												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		menu.js													       //
 //---------------------------------------------------------------------//
