@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------//
-//Squid Mommie														   //
+//Squid Mommie - Alpha												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
-//		mommie.js													   //
+//		player.js													   //
 //---------------------------------------------------------------------//
 
 "use strict";
@@ -19,7 +19,7 @@ function player(_game, _x, _y, _key) {
 	
 	//p2 physics and collision stuff
 	game.physics.p2.enable(this, true);
-	//this.body.collideWorldBounds = true;
+	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
 	this.body.loadPolygon("squidPhysics", "squid", 0.3);
 	
@@ -44,16 +44,14 @@ function player(_game, _x, _y, _key) {
 			game.physics.arcade.angleToPointer(this) - Math.PI / 2;
 	
 		//clamp range to 2PI to -2PI
-
-		//deltaMouseRad %= Math.PI * 2;
-		deltaMouseRad %= Math.PI;
+		deltaMouseRad %= Math.PI * 2;
 		
 		//offset by 2PI
-		//if (deltaMouseRad !=  deltaMouseRad % Math.PI) {
-		//	deltaMouseRad = (deltaMouseRad < 0) 
-		//	? deltaMouseRad + Math.PI 
-		//	: deltaMouseRad - Math.PI;	
-		//}
+		if (deltaMouseRad !=  deltaMouseRad % Math.PI) {
+			deltaMouseRad = (deltaMouseRad < 0) 
+			? deltaMouseRad + Math.PI * 2 
+			: deltaMouseRad - Math.PI * 2;	
+		}
 		
 		
 		//On left mouse click, rotate, move to mouse
@@ -61,15 +59,20 @@ function player(_game, _x, _y, _key) {
 			//rotate to mouse direction
 			this.body.rotateLeft(50 * deltaMouseRad);
 			
-			
+			var mouseWorldPosX = game.input.activePointer.position.x + game.camera.position.x;
+			var mouseWorldPosY = game.input.activePointer.position.y + game.camera.position.y;
+
 			//get angle from mouse to player
-			var angle = (Math.atan2((3* game.input.position.y) - this.position.y,
-				(3*game.input.position.x) - this.position.x));
+			var angle = (Math.atan2(mouseWorldPosY - this.position.y, mouseWorldPosX - this.position.x));
+		
 		
 			//noramlize angle
 			angle = Phaser.Math.normalizeAngle(angle);
 			
-			//console.log(angle)
+			// console.log("Angle: " + angle);
+			// console.log("MouseX: " + mouseWorldPosX);
+			// console.log("MouseY: " + mouseWorldPosY);
+			// console.log("Player: " + this.position.y);
 			
 			//move to mouse
 			this.body.force.x = Math.cos(angle) * 100;
@@ -101,14 +104,14 @@ player.prototype.update = function() {
 	
 	this.moveToPointerOnClick();
 	
-	if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
-		this.body.velocity.y += 5;
-	else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
-		this.body.velocity.y -= 5;
-	else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-		this.body.velocity.x += 5;
-	else if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-		this.body.velocity.x -= 5;
+	//if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
+	//	this.body.velocity.y += 5;
+	//else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
+	//	this.body.velocity.y -= 5;
+	//else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
+	//	this.body.velocity.x += 5;
+	//else if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
+	//	this.body.velocity.x -= 5;
 	
 
 	
