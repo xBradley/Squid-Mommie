@@ -12,9 +12,22 @@ Play.prototype = {
 	create: function() {
 		//console.log("Play");
 		//playing main theme
-		var theme;
 		this.theme = game.add.audio('theme');
 		this.theme.loopFull();
+
+		//Adding swim SFX
+		this.swim = game.add.audio('swim');
+
+		//Adding singing
+		this.song0 = game.add.audio('sing0');
+		this.song1 = game.add.audio('sing1');
+		this.song2 = game.add.audio('sing2');
+		this.song3 = game.add.audio('sing3');
+		this.song4 = game.add.audio('sing4');
+		this.song5 = game.add.audio('sing5');
+		this.voices; //This will be an array of sounds
+		this.voices = [this.song0, this.song1, this.song2, this.song3, this.song4, this.song5];
+
 
 		//background
 		game.stage.backgroundColor = "#000000";
@@ -54,8 +67,6 @@ Play.prototype = {
         game.physics.p2.convertTilemap(this.map, this.wallLayer);
         this.wallCollisionsGroup = game.physics.p2.createCollisionGroup();
         var wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
-        
-
 		//End of map creation -Matt
 		
 		
@@ -100,9 +111,19 @@ Play.prototype = {
 											nearest.position.y)
 			: distance = undefined;
 		
+		//Playing the swimming sound effect. I would rather have this be played on mouse down, but nothing I try works >~<
+		
+		if (game.input.activePointer.leftButton.justPressed) {
+			this.swim.play();
+		}
 		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
+		
+			//Playing the singing.
+			this.sing = this.voices[this.mommie.getCount()];
+			this.sing.play();
+
 			//if no babbies are alive do final sing
 			if (this.babbies.countLiving() == 0)
 				game.state.start("Gameover", true, false);
@@ -112,7 +133,7 @@ Play.prototype = {
 			//find angle between player to nearest 
 			if (distance >= 200) {
 				//console.log(distance);
-				angle = Phaser.Math.angleBetweenPoints(player.position, 									  nearest.position);
+				angle = Phaser.Math.angleBetweenPoints(player.position, nearest.position);
 				
 				//revive arrow and point to nearest
 				this.arrow.revive();
@@ -122,7 +143,7 @@ Play.prototype = {
 			//find angle between nearest to player
 			else if(distance < 200) {
 				//console.log(nearest);
-				angle = Phaser.Math.angleBetweenPoints(nearest.position, 									   player.position);
+				angle = Phaser.Math.angleBetweenPoints(nearest.position, player.position);
 				
 				//move towards player
 				nearest.body.force.x = Math.cos(angle) * 10000;

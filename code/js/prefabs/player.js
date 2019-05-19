@@ -8,10 +8,6 @@
 //---------------------------------------------------------------------//
 function player(_game, _x, _y, _key) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
-
-	//Adding swim SFX
-	var swim;
-	this.swim = game.add.audio('swim');
 	
 	//set size and anchor
 	this.anchor.setTo(0.5);
@@ -52,7 +48,6 @@ function player(_game, _x, _y, _key) {
 			? deltaMouseRad + Math.PI * 2 
 			: deltaMouseRad - Math.PI * 2;	
 		}
-		
 		
 		//On left mouse click, rotate, move to mouse
 		if (game.input.activePointer.leftButton.isDown) {

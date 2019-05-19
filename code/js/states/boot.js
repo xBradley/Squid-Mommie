@@ -21,7 +21,13 @@ Boot.prototype = {
 		game.load.audio('theme', ['byeWater.ogg']);
 		game.load.audio('swim', ['squidSwim.ogg']);
 		game.load.path = "assets/audio/Lullaby/";
-		game.load.audio('sing', ['Song00.ogg']);
+		game.load.audio('sing0', ['Song00.ogg']);
+		game.load.audio('sing1', ['Song01.ogg']);
+		game.load.audio('sing2', ['Song02.ogg']);
+		game.load.audio('sing3', ['Song03.ogg']);
+		game.load.audio('sing4', ['Song04.ogg']);
+		game.load.audio('sing5', ['Song05.ogg']);
+
 		//end sound loading
 
 		//Adding map assets. Lemme know if you are curious about any of these parts -Matt
