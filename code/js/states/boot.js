@@ -21,13 +21,19 @@ Boot.prototype = {
 		game.load.audio('theme', ['byeWater.ogg']);
 		game.load.audio('swim', ['squidSwim.ogg']);
 		game.load.path = "assets/audio/Lullaby/";
-		game.load.audio('sing0', ['Song00.ogg']);
-		game.load.audio('sing1', ['Song01.ogg']);
-		game.load.audio('sing2', ['Song02.ogg']);
-		game.load.audio('sing3', ['Song03.ogg']);
-		game.load.audio('sing4', ['Song04.ogg']);
-		game.load.audio('sing5', ['Song05.ogg']);
-
+		//Loading squid mommie lullabys
+		game.load.audio('sing00', ['Song00.ogg']);
+		game.load.audio('sing01', ['Song01.ogg']);
+		game.load.audio('sing02', ['Song02.ogg']);
+		game.load.audio('sing03', ['Song03.ogg']);
+		game.load.audio('sing04', ['Song04.ogg']);
+		game.load.audio('sing05', ['Song05.ogg']);
+		//Loading squid baby cries
+		game.load.audio('cry00', ['baby00.ogg']);
+		game.load.audio('cry01', ['baby01.ogg']);
+		game.load.audio('cry02', ['baby02.ogg']);
+		game.load.audio('cry03', ['baby03.ogg']);
+		game.load.audio('cry04', ['baby04.ogg']);
 		//end sound loading
 
 		//Adding map assets. Lemme know if you are curious about any of these parts -Matt

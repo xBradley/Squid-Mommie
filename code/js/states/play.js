@@ -11,23 +11,10 @@ Play.prototype = {
 	//Play screen
 	create: function() {
 		//console.log("Play");
+
 		//playing main theme
 		this.theme = game.add.audio('theme');
 		this.theme.loopFull();
-
-		//Adding swim SFX
-		this.swim = game.add.audio('swim');
-
-		//Adding singing
-		this.song0 = game.add.audio('sing0');
-		this.song1 = game.add.audio('sing1');
-		this.song2 = game.add.audio('sing2');
-		this.song3 = game.add.audio('sing3');
-		this.song4 = game.add.audio('sing4');
-		this.song5 = game.add.audio('sing5');
-		this.voices; //This will be an array of sounds
-		this.voices = [this.song0, this.song1, this.song2, this.song3, this.song4, this.song5];
-
 
 		//background
 		game.stage.backgroundColor = "#000000";
@@ -112,10 +99,6 @@ Play.prototype = {
 			: distance = undefined;
 		
 		//Playing the swimming sound effect. I would rather have this be played on mouse down, but nothing I try works >~<
-		
-		if (game.input.activePointer.leftButton.justPressed) {
-			this.swim.play();
-		}
 		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {

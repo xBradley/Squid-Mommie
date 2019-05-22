@@ -8,6 +8,25 @@
 //---------------------------------------------------------------------//
 function player(_game, _x, _y, _key) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
+
+	//Adding Audio Variables
+	this.swish = false; //quick fix variable to make the swim sfx play at the right time
+	this.swim = game.add.audio('swim');
+	//making lullaby variables
+	this.song00 = game.add.audio('sing00');
+	this.song01 = game.add.audio('sing01');
+	this.song02 = game.add.audio('sing02');
+	this.song03 = game.add.audio('sing03');
+	this.song04 = game.add.audio('sing04');
+	this.song05 = game.add.audio('sing05');
+	//making cry variables
+	this.cry00 = game.add.audio('cry00');
+	this.cry01 = game.add.audio('cry01');
+	this.cry02 = game.add.audio('cry02');
+	this.cry03 = game.add.audio('cry03');
+	this.cry04 = game.add.audio('cry04');
+	this.voices = [this.song00, this.song01, this.song02, this.song03, this.song04, this.song05]; //This here is an array of squid mommie lullabys
+	this.cries = [this.cry00, this.cry01, this.cry02, this.cry03, this.cry04]; //This is an array of squid baby cries
 	
 	//set size and anchor
 	this.anchor.setTo(0.5);
@@ -72,10 +91,18 @@ function player(_game, _x, _y, _key) {
 			//move to mouse
 			this.body.force.x = Math.cos(angle) * 100;
 			this.body.force.y = Math.sin(angle) * 100;
+
+			//squid sound section
+			if (game.input.activePointer.leftButton.justPressed && !this.swish) {
+				console.log('swish swish');
+				this.swim.play();
+				this.swish = true;
+			}
 		}
 		//Off left mouse click, reset player angle
 		
 		else {
+			this.swish = false //resetting the variable after the mouse is released
 			if (Math.floor(this.body.angle) > 1)
 				this.body.angle -= 1;
 			else if (Math.floor(this.body.angle) < -1)
@@ -85,7 +112,6 @@ function player(_game, _x, _y, _key) {
 			
 			//console.log(this.body.angle);
 		}
-		
 		
 	}
 	
