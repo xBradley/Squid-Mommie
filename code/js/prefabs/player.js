@@ -6,7 +6,7 @@
 
 "use strict";
 //---------------------------------------------------------------------//
-function player(_game, _x, _y, _key) {
+function player(_game, _x, _y, _key, _babbies) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
 
 	//Adding swim SFX
@@ -35,7 +35,18 @@ function player(_game, _x, _y, _key) {
 	this.getCount = function() {
 		return babbieCount;
 	}
-	
+
+	//get closest baby from player
+	this.findNearest = function() {
+		return _babbies.getClosestTo(this);
+	}
+
+	//eat baby, increment count
+	this.collectBaby = function(babbie) {
+			babbie.destroy();
+			this.incrementCount();
+	}
+
 	//mouse controls 
 	this.moveToPointerOnClick = function() {
 		
@@ -52,7 +63,6 @@ function player(_game, _x, _y, _key) {
 			? deltaMouseRad + Math.PI * 2 
 			: deltaMouseRad - Math.PI * 2;	
 		}
-		
 		
 		//On left mouse click, rotate, move to mouse
 		if (game.input.activePointer.leftButton.isDown) {
@@ -79,19 +89,69 @@ function player(_game, _x, _y, _key) {
 			this.body.force.y = Math.sin(angle) * 100;
 		}
 		//Off left mouse click, reset player angle
-		
 		else {
 			if (Math.floor(this.body.angle) > 1)
 				this.body.angle -= 1;
 			else if (Math.floor(this.body.angle) < -1)
 				this.body.angle += 1;
-			else if (Math.floor(this.body.angle) <= 1 && Math.floor(this.body.angle) >= -1)
+			else if (Math.floor(this.body.angle) <= 1 && 
+			         Math.floor(this.body.angle) >= -1)
 				this.body.angle = 0;
-			
-			//console.log(this.body.angle);
 		}
+
+	}
+
+	this.sing = function() {
+		var nearest = this.findNearest();    		//finds nearest babbie
+		var distance;								//distance variable
+
+		//if nearest is defined, find distance from player to nearest
+		//else distance is undefined
+		(nearest != null) ? 
+			distance = Phaser.Math.distance(this.position.x, 
+											this.position.y,
+										    nearest.position.x, 
+											nearest.position.y)
+			: distance = undefined;
 		
 		
+		//Spacebar controls
+		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
+			//if no babbies are alive do final sing
+			if (_babbies.countLiving() == 0)
+				game.state.start("Gameover", true, false);
+			
+			var angle;
+			//if distance is greater than 200,
+			//find angle between player to nearest 
+			if (distance >= 200) {
+				//console.log(distance);
+				angle = Phaser.Math.angleBetweenPoints(this.position, 									  nearest.position);
+				
+				//revive arrow and point to nearest
+				//this.arrow.revive();
+				//this.arrow.angle = Phaser.Math.radToDeg(angle) + 90;	
+			}
+			//if distance is less than 200,
+			//find angle between nearest to player
+			else if(distance < 200) {
+				//console.log(nearest);
+				angle = Phaser.Math.angleBetweenPoints(nearest.position, 									   this.position);
+				
+				//move towards player
+				nearest.body.force.x = Math.cos(angle) * 10000;
+				nearest.body.force.y = Math.sin(angle) * 10000;
+			}
+		}
+		  
+		
+		//arrow is fixed on player
+		//this.arrow.position.x = player.position.x + 20;
+		//this.arrow.position.y = player.position.y - 70;;
+		
+		//if distance is less than 50, eat baby
+		if (distance != undefined && distance <= 50)
+			this.collectBaby(nearest);
 	}
 	
 	
@@ -103,19 +163,8 @@ player.prototype.constructor = player;
 player.prototype.update = function() {
 	
 	this.moveToPointerOnClick();
-	
-	//if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
-	//	this.body.velocity.y += 5;
-	//else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
-	//	this.body.velocity.y -= 5;
-	//else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-	//	this.body.velocity.x += 5;
-	//else if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-	//	this.body.velocity.x -= 5;
-	
 
-	
-	
+	this.sing();	
 	
 }
 //---------------------------------------------------------------------//

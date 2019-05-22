@@ -14,6 +14,7 @@ Boot.prototype = {
 		game.load.image("bg", "waterBackground.jpg"); 
 		game.load.image("squid", "squid.png");
 		game.load.image("arrow", "arrow.png");
+		game.load.image("soundWave", "soundwave.png");
 		game.load.physics("squidPhysics", "squid.json");
 
 		//loading sounds -Matt
