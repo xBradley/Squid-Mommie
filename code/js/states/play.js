@@ -27,20 +27,6 @@ Play.prototype = {
 	    game.physics.p2.setImpactEvents(true); //added in the desperate attempt to make the map work
 		game.physics.p2.gravity.y = 0;
 
-		//Creating map -Matt
-		
-		//This here is a map in progress
-		/*var map; //I don't know a better place to declare these variable -Matt
-		var backgroundLayer;
-		var decorationsLayer;
-		var wallLayer;
-		this.map = game.add.tilemap('world');
-		this.map.addTilesetImage('caves', 'caveTiles'); // 'caves' is referring to the tilesets in the 'depths.json' file.
-		this.map.setCollisionByExclusion([]);
-		this.wallLayer = this.map.createLayer('walls'); //this part referes to the 'walls' layer in our map json file.
-		//this.wallLayer.resizeWorld(); //This isn't working very well :(
-		*/
-
 		//This is for the origional map I made that will probably work for testing.
 		this.map = game.add.tilemap('globe');
 		this.map.addTilesetImage('ForgottenDungeon', 'dungeon');
@@ -54,21 +40,28 @@ Play.prototype = {
         game.physics.p2.convertTilemap(this.map, this.wallLayer);
         this.wallCollisionsGroup = game.physics.p2.createCollisionGroup();
         var wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
+        
 		//End of map creation -Matt
 		
-		
-		//add player character (mommie)
-		this.mommie = new player(game, 300, 300, "squid");
-		game.add.existing(this.mommie);
+		// this.soundWaveEmitter = game.add.emitter(200,200);
+		// this.soundWaveEmitter.makeParticles("soundWave", 0, 5);
+		// this.soundWaveEmitter.start(false, 5000, 500);
+		// this.soundWaveEmitter.gravity.y = 10;
+		// let area = new Phaser.Rectangle(this.soundWaveEmitter.area.x, this.soundWaveEmitter.area.y, 0.3, 1);
+		// this.soundWaveEmitter.area = area;
+		// console.log(this.soundWaveEmitter.area);
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		this.spawnBaby(1030, 315);
-		//this.spawnBaby(600,800);
-		this.spawnBaby(1135,1540);
-		this.spawnBaby(621,1530);
-		this.spawnBaby(412,1140);
+		//this.spawnBaby(1135,1540);
+		//this.spawnBaby(621,1530);
+		//this.spawnBaby(412,1140);
 		
+		//add player character (mommie)
+		this.mommie = new player(game, 300, 300, "squid", this.babbies);
+		game.add.existing(this.mommie);
+
 		//add arrow sprite for guidance 
 		this.arrow = game.add.sprite(200, 200, "arrow");
 		this.arrow.scale.setTo(0.1);
@@ -85,63 +78,7 @@ Play.prototype = {
 	
 	//Play update loop
 	update: function() {
-		var nearest = this.findNearest();			//finds nearest babbie
-		var player = this.mommie;					//shortcut for mommie
-		var distance;								//distance variable
-
-		//if nearest is defined, find distance from player to nearest
-		//else distance is undefined
-		(nearest != null) ? 
-			distance = Phaser.Math.distance(player.position.x, 
-											player.position.y,
-										    nearest.position.x, 
-											nearest.position.y)
-			: distance = undefined;
 		
-		//Playing the swimming sound effect. I would rather have this be played on mouse down, but nothing I try works >~<
-		
-		//Spacebar controls
-		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
-		
-			//Playing the singing.
-			this.sing = this.voices[this.mommie.getCount()];
-			this.sing.play();
-
-			//if no babbies are alive do final sing
-			if (this.babbies.countLiving() == 0)
-				game.state.start("Gameover", true, false);
-			
-			var angle;								//angle variable
-			//if distance is greater than 200,
-			//find angle between player to nearest 
-			if (distance >= 200) {
-				//console.log(distance);
-				angle = Phaser.Math.angleBetweenPoints(player.position, nearest.position);
-				
-				//revive arrow and point to nearest
-				this.arrow.revive();
-				this.arrow.angle = Phaser.Math.radToDeg(angle) + 90;	
-			}
-			//if distance is less than 200,
-			//find angle between nearest to player
-			else if(distance < 200) {
-				//console.log(nearest);
-				angle = Phaser.Math.angleBetweenPoints(nearest.position, player.position);
-				
-				//move towards player
-				nearest.body.force.x = Math.cos(angle) * 10000;
-				nearest.body.force.y = Math.sin(angle) * 10000;
-			}
-		}
-		  
-		
-		//arrow is fixed on player
-		this.arrow.position.x = player.position.x + 20;
-		this.arrow.position.y = player.position.y - 70;;
-		
-		//if distance is less than 50, eat baby
-		if (distance != undefined && distance <= 50)
-			this.collectBaby(nearest);
 	},
 	
 	render: function() {
@@ -149,7 +86,7 @@ Play.prototype = {
 		//game.debug.spriteCoords(this.mommie, 32, 500);
 		//game.debug.pointer(game.input.activePointer);
 		
-		//var zone = game.camera.deadzone;
+		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
 		//game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
 	},
@@ -160,17 +97,5 @@ Play.prototype = {
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
-	
-	//get closest baby from player
-	findNearest: function() {
-		return this.babbies.getClosestTo(this.mommie);
-	},
-	
-	//eat baby, increment count
-	collectBaby: function(babbie) {
-		babbie.destroy();
-		this.mommie.incrementCount();
-	},
-	
 }
 //---------------------------------------------------------------------//
