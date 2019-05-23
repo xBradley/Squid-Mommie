@@ -8,13 +8,13 @@
 //---------------------------------------------------------------------//
 var Play = function(game) {};
 Play.prototype = {
-	//Play screen
+	init: function(_xpos, _ypos, _count){
+		this.xpos = _xpos;
+		this.ypos = _ypos;
+		this.count = _count;
+	},
 	create: function() {
 		//console.log("Play");
-
-		//playing main theme
-		this.theme = game.add.audio('theme');
-		this.theme.loopFull();
 
 		//background
 		game.stage.backgroundColor = "#2F4F4F";
@@ -55,9 +55,11 @@ Play.prototype = {
 		this.spawnBaby(496, 1230);
 		
 		//add player character (mommie)
-		this.mommie = new player(game, 300, 300, "squid", this.babbies);
+		this.mommie = new player(game, 300, 300, "squid", this.babbies, this.count);
 		game.add.existing(this.mommie);
-
+		this.mommie.body.x = this.xpos;
+		this.mommie.body.y = this.ypos;
+		
 		//add arrow sprite for guidance 
 		this.arrow = game.add.sprite(200, 200, "arrow");
 		this.arrow.scale.setTo(0.1);
@@ -69,13 +71,20 @@ Play.prototype = {
 		this.arrowTimer.start();
 		
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
-		
+		console.log(this.mommie.getCount());
 	},
 	
 	//Play update loop
 	update: function() {
-		if(this.mommie.body.x >= 1880)
-			game.state.start('Level01');
+		if(this.mommie.body.x >= 1880){
+			this.temp = this.mommie.getCount();
+			game.state.start('Level01', false, false, 90, 205, this.temp);
+			console.log(this.mommie.getCount() + 'getting count');
+			this.wallLayer.destroy();
+			this.backgroundLayer.destroy();
+			this.mommie.destroy();
+			this.babbies.destroy();
+		}
 	},
 	
 	render: function() {
