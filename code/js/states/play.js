@@ -40,45 +40,25 @@ Play.prototype = {
         game.physics.p2.convertTilemap(this.map, this.wallLayer);
         this.wallCollisionsGroup = game.physics.p2.createCollisionGroup();
         var wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
-        
 		//End of map creation -Matt
-		
-		// this.soundWaveEmitter = game.add.emitter(200,200);
-		// this.soundWaveEmitter.makeParticles("soundWave", 0, 5);
-		// this.soundWaveEmitter.start(false, 5000, 500);
-		// this.soundWaveEmitter.gravity.y = 10;
-		// let area = new Phaser.Rectangle(this.soundWaveEmitter.area.x, this.soundWaveEmitter.area.y, 0.3, 1);
-		// this.soundWaveEmitter.area = area;
-		// console.log(this.soundWaveEmitter.area);
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(1030, 315);
+		this.spawnBaby(750, 715);
 		//this.spawnBaby(1135,1540);
 		//this.spawnBaby(621,1530);
 		//this.spawnBaby(412,1140);
 		
 		//add player character (mommie)
-		this.mommie = new player(game, 300, 300, "squid", this.babbies);
+		this.mommie = new player(game, 310, 300, "squid", this.babbies);
 		game.add.existing(this.mommie);
-
-		//add arrow sprite for guidance 
-		this.arrow = game.add.sprite(200, 200, "arrow");
-		this.arrow.scale.setTo(0.1);
-		this.arrow.kill();
-		
-		//arrow timer to be killed every 3 seconds
-		this.arrowTimer = game.time.create(false);
-		this.arrowTimer.loop(3000, function() {this.arrow.kill();}, this);
-		this.arrowTimer.start();
 		
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
-		
 	},
 	
 	//Play update loop
 	update: function() {
-		
+
 	},
 	
 	render: function() {

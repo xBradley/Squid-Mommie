@@ -37,6 +37,33 @@ function player(_game, _x, _y, _key, _babbies) {
 	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
 	this.body.loadPolygon("squidPhysics", "squid", 0.3);
+
+	var sLifespan = 2000;
+	var sQuanity = 3;
+	var sRate = 500;
+	this.soundWaveEmitter = game.add.emitter(-300,300);
+	this.soundWaveEmitter.makeParticles("soundWave", 0, sQuanity);
+	this.soundWaveEmitter.gravity.y = 0;
+	this.soundWaveEmitter.setRotation(0,0);
+	this.soundWaveEmitter.setXSpeed(0,0);
+	this.soundWaveEmitter.setYSpeed(-100,-100);
+	this.soundWaveEmitter.setScale(0.5, 6, 0.5, 3, sLifespan);
+	this.soundWaveEmitter.setAlpha(1, 0, sLifespan);
+
+	var rLifespan = 1000;
+	var rQuanity = 1;
+	var rMaxSize = 10;
+	var rMinSize = 1;
+	var rRate = 100;
+	this.radialWaveEmitter = game.add.emitter(-300,300);
+	this.radialWaveEmitter.makeParticles("radialWave", 0, rQuanity);
+	this.radialWaveEmitter.gravity.y = 0;
+	this.radialWaveEmitter.setRotation(0,0);
+	this.radialWaveEmitter.setXSpeed(0,0);
+	this.radialWaveEmitter.setYSpeed(0,0);
+	this.radialWaveEmitter.setScale(rMinSize, rMaxSize, 
+		                            rMinSize, rMaxSize, rLifespan);
+	this.radialWaveEmitter.setAlpha(1, 0, rLifespan);
 	
 	//babbies eaten count
 	var babbieCount = 0;
@@ -53,7 +80,7 @@ function player(_game, _x, _y, _key, _babbies) {
 
 	//get closest baby from player
 	this.findNearest = function() {
-		return _babbies.getClosestTo(this);
+		return _babbies.getClosestTo(this); 
 	}
 
 	//eat baby, increment count
@@ -137,43 +164,118 @@ function player(_game, _x, _y, _key, _babbies) {
 											nearest.position.y)
 			: distance = undefined;
 		
-		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
 			//if no babbies are alive do final sing
 			if (_babbies.countLiving() == 0)
 				game.state.start("Gameover", true, false);
 			
+			this.radialWaveEmitter.emitX = this.position.x;
+			this.radialWaveEmitter.emitY = this.position.y;
+			this.radialWaveEmitter.start(false, rLifespan, rRate, rQuanity);
+			
 			var angle;
-			//if distance is greater than 200,
+			//if distance is greater than 400,
 			//find angle between player to nearest 
-			if (distance >= 200) {
-				//console.log(distance);
+			if (distance >= 400) {
+				console.log(distance);
 				angle = Phaser.Math.angleBetweenPoints(this.position, 									  nearest.position);
 				
-				//revive arrow and point to nearest
-				//this.arrow.revive();
-				//this.arrow.angle = Phaser.Math.radToDeg(angle) + 90;	
+				angle = Phaser.Math.radToDeg(Phaser.Math.reverseAngle(angle));
+				
+				//console.log(game.camera.atLimit);
+				//console.log(this.position.x);
+				//console.log(this.position.y);
+				var soundDirX = this.position.x;
+				var soundDirY = this.position.y;
+				if (angle > 225 && angle < 315) {
+					console.log("above");
+					if (game.camera.atLimit.y == true &&
+						game.camera.atLimit.x == false )
+						soundDirY += 450;
+					else
+						soundDirY += 350;
+					
+					//soundDirX = nearest.position.x;
+					this.soundWaveEmitter.angle = 0;
+					this.soundWaveEmitter.emitX = 1 * soundDirX;
+					this.soundWaveEmitter.emitY = 1 * soundDirY;
+				}
+				else if (angle >= 315 && angle <= 360 || 
+					     angle >= 0   && angle <= 45) {
+					console.log("right");
+					soundDirX -= 350;
+					this.soundWaveEmitter.angle = 90;
+					this.soundWaveEmitter.emitX =  1 * soundDirY;
+					this.soundWaveEmitter.emitY = -1 * soundDirX;
+				}
+				else if (angle > 45 && angle < 135) {
+					console.log("below");
+					if (game.camera.atLimit.y == true)
+						soundDirY -= 600;
+					else
+						soundDirY -= 350;
+					
+					this.soundWaveEmitter.angle = 180;
+					this.soundWaveEmitter.emitX = -1 * soundDirX;
+					this.soundWaveEmitter.emitY = -1 * soundDirY;
+				}
+				else if (angle >= 135 && angle <= 225) {
+					console.log("left");
+					soundDirX += 350;
+					//soundDirY = nearest.position.y;
+					this.soundWaveEmitter.angle = 270;
+					this.soundWaveEmitter.emitX = -1 * soundDirY;
+					this.soundWaveEmitter.emitY =  1 * soundDirX;
+				}
+				this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
+				
+			}
+			else if (distance > 200 && distance < 400) {
+				console.log(distance);
+				angle = Phaser.Math.angleBetweenPoints(this.position, 									  nearest.position);
+				
+				angle = Phaser.Math.radToDeg(Phaser.Math.reverseAngle(angle));
+				
+				var soundDirX = nearest.position.x;
+				var soundDirY = nearest.position.y;
+				if (angle > 225 && angle < 315) {
+					this.soundWaveEmitter.angle = 0;
+					this.soundWaveEmitter.emitX = 1 * soundDirX;
+					this.soundWaveEmitter.emitY = 1 * soundDirY;
+				}
+				else if (angle >= 315 && angle <= 360 || 
+					     angle >= 0   && angle <= 45) {
+					this.soundWaveEmitter.angle = 90;
+					this.soundWaveEmitter.emitX =  1 * soundDirY;
+					this.soundWaveEmitter.emitY = -1 * soundDirX;
+				}
+				else if (angle > 45 && angle < 135) {
+					this.soundWaveEmitter.angle = 180;
+					this.soundWaveEmitter.emitX = -1 * soundDirX;
+					this.soundWaveEmitter.emitY = -1 * soundDirY;
+				}
+				else if (angle >= 135 && angle <= 225) {
+					this.soundWaveEmitter.angle = 270;
+					this.soundWaveEmitter.emitX = -1 * soundDirY;
+					this.soundWaveEmitter.emitY =  1 * soundDirX;
+				}
+				this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
 			}
 			//if distance is less than 200,
-			//find angle between nearest to player
-			else if(distance < 200) {
+			//find angle between nearest to players
+			else if(distance <= 200) {
 				//console.log(nearest);
 				angle = Phaser.Math.angleBetweenPoints(nearest.position, 									   this.position);
-				
 				//move towards player
 				nearest.body.force.x = Math.cos(angle) * 10000;
 				nearest.body.force.y = Math.sin(angle) * 10000;
 			}
+			
 		}
-		  
-		
-		//arrow is fixed on player
-		//this.arrow.position.x = player.position.x + 20;
-		//this.arrow.position.y = player.position.y - 70;;
 		
 		//if distance is less than 50, eat baby
-		if (distance != undefined && distance <= 50)
+		if (distance != undefined && distance <= 50) 
 			this.collectBaby(nearest);
 	}
 	
