@@ -104,8 +104,7 @@ function player(_game, _x, _y, _key, _babbies) {
 			this.body.force.y = Math.sin(angle) * 100;
 
 			//squid sound section
-			if (game.input.activePointer.leftButton.justPressed && !this.swish) {
-				console.log('swish swish');
+			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {
 				this.swim.play();
 				this.swish = true;
 			}
@@ -137,12 +136,19 @@ function player(_game, _x, _y, _key, _babbies) {
 											nearest.position.y)
 			: distance = undefined;
 		
+
+		this.lullaby = this.voices[this.getCount()];
+		this.cry = this.cries[this.getCount()];
 		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
 			//if no babbies are alive do final sing
 			if (_babbies.countLiving() == 0)
 				game.state.start("Gameover", true, false);
+
+			//lullaby
+			if(!this.lullaby.isPlaying)
+				this.lullaby.play();
 			
 			var angle;
 			//if distance is greater than 200,
@@ -166,6 +172,12 @@ function player(_game, _x, _y, _key, _babbies) {
 				nearest.body.force.y = Math.sin(angle) * 10000;
 			}
 		}
+
+		//adding the feedback sound from the babys
+		if(this.lullaby.isPlaying && this.lullaby.currentTime >= (this.lullaby.durationMS - 300) && ! this.cry.isPlaying){
+				console.log("beep beep");
+				this.cry.play();			
+		}
 		  
 		
 		//arrow is fixed on player
@@ -177,7 +189,6 @@ function player(_game, _x, _y, _key, _babbies) {
 			this.collectBaby(nearest);
 	}
 	
-	
 }
 
 player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -188,7 +199,9 @@ player.prototype.update = function() {
 	this.moveToPointerOnClick();
 
 	this.sing();	
-	
+		
+
+
 }
 //---------------------------------------------------------------------//
 

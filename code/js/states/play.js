@@ -17,7 +17,7 @@ Play.prototype = {
 		this.theme.loopFull();
 
 		//background
-		game.stage.backgroundColor = "#000000";
+		game.stage.backgroundColor = "#2F4F4F";
 		//game.add.sprite(0,0, "bg");
 		
 		game.world.setBounds(0,0, 1600, 1600);
@@ -28,18 +28,17 @@ Play.prototype = {
 		game.physics.p2.gravity.y = 0;
 
 		//This is for the origional map I made that will probably work for testing.
-		this.map = game.add.tilemap('globe');
-		this.map.addTilesetImage('ForgottenDungeon', 'dungeon');
-		this.map.addTilesetImage('construction_tileset', 'metal');
-		this.backgroundLayer = this.map.createLayer('Background');
-		this.wallLayer = this.map.createLayer('Walls');
+		this.map = game.add.tilemap('world00');
+		this.map.addTilesetImage('slopes', 'slopes');
+		this.backgroundLayer = this.map.createLayer('background');
+		this.wallLayer = this.map.createLayer('walls');
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 		this.wallLayer.resizeWorld();
 
 		//adding wall physics
         game.physics.p2.convertTilemap(this.map, this.wallLayer);
         this.wallCollisionsGroup = game.physics.p2.createCollisionGroup();
-        var wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
+        this.wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
         
 		//End of map creation -Matt
 		
@@ -53,10 +52,7 @@ Play.prototype = {
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(1030, 315);
-		//this.spawnBaby(1135,1540);
-		//this.spawnBaby(621,1530);
-		//this.spawnBaby(412,1140);
+		this.spawnBaby(496, 1230);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, 300, 300, "squid", this.babbies);
@@ -78,13 +74,14 @@ Play.prototype = {
 	
 	//Play update loop
 	update: function() {
-		
+		if(this.mommie.body.x >= 1880)
+			game.state.start('Level01');
 	},
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
-		//game.debug.spriteCoords(this.mommie, 32, 500);
-		//game.debug.pointer(game.input.activePointer);
+		game.debug.spriteCoords(this.mommie, 32, 500);
+		game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
