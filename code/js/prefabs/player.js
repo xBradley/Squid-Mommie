@@ -283,7 +283,6 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 
 		//adding the feedback sound from the babys
 		if(this.lullaby.isPlaying && this.lullaby.currentTime >= (this.lullaby.durationMS - 300) && ! this.cry.isPlaying){
-				console.log("beep beep");
 				this.cry.play();			
 		}
 		

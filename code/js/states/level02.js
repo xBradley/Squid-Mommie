@@ -45,9 +45,6 @@ Level02.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		this.spawnBaby(975, 945);
-		//this.spawnBaby(1135,1540);
-		//this.spawnBaby(621,1530);
-		//this.spawnBaby(412,1140);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, 1138, 1777, "squid", this.babbies, this.count);
