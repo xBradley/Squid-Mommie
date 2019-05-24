@@ -78,14 +78,13 @@ Level03.prototype = {
 	
 	//Play update loop
 	update: function() {
-		if(this.mommie.body.y <= 24){
+		if(this.mommie.body.y <= 30){
 			game.state.start('Level01', false, false, 1535, 3105, this.mommie.getCount());
 			this.mommie.destroy();
 			this.babbies.destroy();
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.foreground.destroy();
-			this.foreground2.destroy();
 		}
 	},
 	

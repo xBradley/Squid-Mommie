@@ -55,7 +55,7 @@ Level01.prototype = {
 		this.spawnBaby(1528, 1608);
 		this.spawnBaby(895, 2795);
 
-		this.frontLayer = this.map.createLayer('foreground'); //I spawn the foreground here so that it covered up the babys
+		this.foreground = this.map.createLayer('foreground'); //I spawn the foreground here so that it covered up the babys
 
 		
 		//add player character (mommie)
