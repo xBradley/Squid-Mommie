@@ -11,6 +11,10 @@ Menu.prototype = {
 	//Menu screen  
 	create: function() {
 		//console.log("Menu");
+
+		//playing main theme
+		this.theme = game.add.audio('theme');
+		this.theme.loopFull();
 		
 		game.stage.backgroundColor = "#dabbed";
 		game.add.text(115, 200, "Squid Mommie", {
@@ -67,8 +71,11 @@ Menu.prototype = {
 	},
 	
 	update: function() {
+		this.xpos = 380;
+		this.ypos = 280;
+		this.count = 0;
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			game.state.start("Play", true, false);
+			game.state.start("Play", true, false, this.xpos, this.ypos, this.count);
 	},
 }
 //---------------------------------------------------------------------//

@@ -48,9 +48,11 @@ Boot.prototype = {
 
 		//This is loading in the origional map
 		game.load.path = 'assets/map/';
-		game.load.tilemap('globe', 'map01.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.spritesheet('dungeon', 'ForgottenDungeon.png', 16, 16);
-		game.load.spritesheet('metal', 'construction_tileset.png', 16, 16);
+		game.load.tilemap('world00', 'section00.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('world01', 'section01.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('world02', 'section02.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('world03', 'section03.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.spritesheet('slopes', 'slope1.png', 32, 32);
 		//end of map asset loading -Matt
 	},
 	

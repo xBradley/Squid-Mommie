@@ -6,15 +6,14 @@
 
 "use strict";
 //---------------------------------------------------------------------//
-var Play = function(game) {};
-Play.prototype = {
+var Level01 = function(game) {};
+Level01.prototype = {
 	init: function(_xpos, _ypos, _count){
 		this.xpos = _xpos;
 		this.ypos = _ypos;
 		this.count = _count;
 	},
 	create: function() {
-		//console.log("Play");
 
 		//background
 		game.stage.backgroundColor = "#2F4F4F";
@@ -28,7 +27,7 @@ Play.prototype = {
 		game.physics.p2.gravity.y = 0;
 
 		//This is for the origional map I made that will probably work for testing.
-		this.map = game.add.tilemap('world00');
+		this.map = game.add.tilemap('world01');
 		this.map.addTilesetImage('slopes', 'slopes');
 		this.backgroundLayer = this.map.createLayer('background');
 		this.wallLayer = this.map.createLayer('walls');
@@ -42,28 +41,66 @@ Play.prototype = {
         
 		//End of map creation -Matt
 		
+		// this.soundWaveEmitter = game.add.emitter(200,200);
+		// this.soundWaveEmitter.makeParticles("soundWave", 0, 5);
+		// this.soundWaveEmitter.start(false, 5000, 500);
+		// this.soundWaveEmitter.gravity.y = 10;
+		// let area = new Phaser.Rectangle(this.soundWaveEmitter.area.x, this.soundWaveEmitter.area.y, 0.3, 1);
+		// this.soundWaveEmitter.area = area;
+		// console.log(this.soundWaveEmitter.area);
+		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(496, 1230);
+		this.spawnBaby(520, 240);
+		this.spawnBaby(1528, 1608);
+		this.spawnBaby(895, 2795);
+
+		this.frontLayer = this.map.createLayer('foreground'); //I spawn the foreground here so that it covered up the babys
+
 		
 		//add player character (mommie)
-		this.mommie = new player(game, 300, 300, "squid", this.babbies, this.count);
+		this.mommie = new player(game, 90, 205, "squid", this.babbies, this.count);
 		game.add.existing(this.mommie);
 		this.mommie.body.x = this.xpos;
 		this.mommie.body.y = this.ypos;
+
+		//add arrow sprite for guidance 
+		this.arrow = game.add.sprite(200, 200, "arrow");
+		this.arrow.scale.setTo(0.1);
+		this.arrow.kill();
+		
+		//arrow timer to be killed every 3 seconds
+		this.arrowTimer = game.time.create(false);
+		this.arrowTimer.loop(3000, function() {this.arrow.kill();}, this);
+		this.arrowTimer.start();
 		
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
-		console.log(this.mommie.getCount());
+		
 	},
 	
 	//Play update loop
 	update: function() {
-		if(this.mommie.body.x >= 1880){
-			this.temp = this.mommie.getCount();
-			game.state.start('Level01', false, false, 90, 205, this.temp);
-			console.log(this.mommie.getCount() + 'getting count');
+		if(this.mommie.body.x <= 30){ //Moving back to level 0 This is kinda buggy rn
+			game.state.start('Play', false, false, 1840, 200, this.mommie.getCount());
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
+			this.foreground.destroy();
+			this.mommie.destroy();
+			this.babbies.destroy();
+		}
+		else if(this.mommie.body.y <= 30){ //Moving to level 2
+			game.state.start('Level02', false, false, 1120, 1825, this.mommie.getCount());
+			this.wallLayer.destroy();
+			this.backgroundLayer.destroy();
+			this.foreground.destroy();
+			this.mommie.destroy();
+			this.babbies.destroy();
+		}
+		else if(this.mommie.body.y >= 3170){ //moving to level 3
+			game.state.start('Level03', false, false, 320, 70, this.mommie.getCount());
+			this.wallLayer.destroy();
+			this.backgroundLayer.destroy();
+			this.foreground.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
 		}
@@ -71,7 +108,7 @@ Play.prototype = {
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
-		//game.debug.spriteCoords(this.mommie, 32, 500);
+		game.debug.spriteCoords(this.mommie, 32, 500);
 		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;

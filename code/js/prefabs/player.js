@@ -6,7 +6,7 @@
 
 "use strict";
 //---------------------------------------------------------------------//
-function player(_game, _x, _y, _key, _babbies) {
+function player(_game, _x, _y, _key, _babbies, _count) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
 
 	//Adding Audio Variables
@@ -33,7 +33,7 @@ function player(_game, _x, _y, _key, _babbies) {
 	this.scale.setTo(0.3);
 	
 	//p2 physics and collision stuff
-	game.physics.p2.enable(this, true);
+	game.physics.p2.enable(this, false);
 	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
 	this.body.loadPolygon("squidPhysics", "squid", 0.3);
@@ -66,7 +66,7 @@ function player(_game, _x, _y, _key, _babbies) {
 	this.radialWaveEmitter.setAlpha(1, 0, rLifespan);
 	
 	//babbies eaten count
-	var babbieCount = 0;
+	var babbieCount = _count;
 	
 	//function to count eaten babbies
 	this.incrementCount = function() {
@@ -131,8 +131,7 @@ function player(_game, _x, _y, _key, _babbies) {
 			this.body.force.y = Math.sin(angle) * 100;
 
 			//squid sound section
-			if (game.input.activePointer.leftButton.justPressed && !this.swish) {
-				console.log('swish swish');
+			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {
 				this.swim.play();
 				this.swish = true;
 			}
@@ -164,11 +163,19 @@ function player(_game, _x, _y, _key, _babbies) {
 											nearest.position.y)
 			: distance = undefined;
 		
+
+		this.lullaby = this.voices[this.getCount()];
+		this.cry = this.cries[this.getCount()];
+		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
-			//if no babbies are alive do final sing
-			if (_babbies.countLiving() == 0)
+			//if the player collects all the babies they do their final sing
+			if (babbieCount == 5)
 				game.state.start("Gameover", true, false);
+
+			//lullaby
+			if(!this.lullaby.isPlaying)
+				this.lullaby.play();
 			
 			this.radialWaveEmitter.emitX = this.position.x;
 			this.radialWaveEmitter.emitY = this.position.y;
@@ -273,12 +280,17 @@ function player(_game, _x, _y, _key, _babbies) {
 			}
 			
 		}
+
+		//adding the feedback sound from the babys
+		if(this.lullaby.isPlaying && this.lullaby.currentTime >= (this.lullaby.durationMS - 300) && ! this.cry.isPlaying){
+				console.log("beep beep");
+				this.cry.play();			
+		}
 		
 		//if distance is less than 50, eat baby
 		if (distance != undefined && distance <= 50) 
 			this.collectBaby(nearest);
 	}
-	
 	
 }
 
@@ -290,7 +302,9 @@ player.prototype.update = function() {
 	this.moveToPointerOnClick();
 
 	this.sing();	
-	
+		
+
+
 }
 //---------------------------------------------------------------------//
 
