@@ -42,14 +42,6 @@ Play.prototype = {
         
 		//End of map creation -Matt
 		
-		// this.soundWaveEmitter = game.add.emitter(200,200);
-		// this.soundWaveEmitter.makeParticles("soundWave", 0, 5);
-		// this.soundWaveEmitter.start(false, 5000, 500);
-		// this.soundWaveEmitter.gravity.y = 10;
-		// let area = new Phaser.Rectangle(this.soundWaveEmitter.area.x, this.soundWaveEmitter.area.y, 0.3, 1);
-		// this.soundWaveEmitter.area = area;
-		// console.log(this.soundWaveEmitter.area);
-		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		this.spawnBaby(496, 1230);
@@ -59,16 +51,6 @@ Play.prototype = {
 		game.add.existing(this.mommie);
 		this.mommie.body.x = this.xpos;
 		this.mommie.body.y = this.ypos;
-		
-		//add arrow sprite for guidance 
-		this.arrow = game.add.sprite(200, 200, "arrow");
-		this.arrow.scale.setTo(0.1);
-		this.arrow.kill();
-		
-		//arrow timer to be killed every 3 seconds
-		this.arrowTimer = game.time.create(false);
-		this.arrowTimer.loop(3000, function() {this.arrow.kill();}, this);
-		this.arrowTimer.start();
 		
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
 		console.log(this.mommie.getCount());
@@ -89,8 +71,8 @@ Play.prototype = {
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
-		game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.spriteCoords(this.mommie, 32, 500);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
