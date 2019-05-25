@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Alpha												   //
+//Squid Mommie - Beta												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		babySquid.js												   //
 //---------------------------------------------------------------------//
@@ -18,10 +18,10 @@ function babySquid(_game, _x, _y, _key) {
 	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
 	this.body.loadPolygon("squidPhysics", "squid", 0.1);
+	this.body.mass = 0.2;
 }
 
 babySquid.prototype = Object.create(Phaser.Sprite.prototype);
 babySquid.prototype.constructor = babySquid;
-
 //---------------------------------------------------------------------//
 

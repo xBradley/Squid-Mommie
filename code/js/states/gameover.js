@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Alpha												   //
+//Squid Mommie - Beta												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		gameover.js													   //
 //---------------------------------------------------------------------//
@@ -10,7 +10,7 @@ var Gameover = function(game) {};
 Gameover.prototype = {
 
     create: function() {
-        //console.log("Boot");
+        console.log("Gameover");
         game.stage.backgroundColor = "#deface";
         game.add.text(115, 200, "Thank You For Playing", {
                     fontSize: "42px", 
@@ -23,6 +23,7 @@ Gameover.prototype = {
     },
 
     update: function() {
+        //restart game on spacebar
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
 			game.state.start("Boot", true, true);
 	},
