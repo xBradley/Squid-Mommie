@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Alpha												   //
+//Squid Mommie - Beta												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		menu.js													       //
 //---------------------------------------------------------------------//
@@ -10,7 +10,7 @@ var Menu = function(game) {};
 Menu.prototype = {
 	//Menu screen  
 	create: function() {
-		//console.log("Menu");
+		console.log("Menu");
 
 		//playing main theme
 		this.theme = game.add.audio('theme');
@@ -51,6 +51,7 @@ Menu.prototype = {
 					  strokeThickness: 7,
 					  }
 		);
+		
 		game.add.text(170, 20, "Goal: Find all your babbies", {
 			          fontSize: "24px", 
 					  fill: "#fff",
@@ -68,14 +69,16 @@ Menu.prototype = {
 					  strokeThickness: 4,
 					  }
 		);
-	},
-	
-	update: function() {
+
 		this.xpos = 380;
 		this.ypos = 280;
 		this.count = 0;
+	},
+	
+	update: function() {
+		//start game on spacebar
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			game.state.start("Play", true, false, this.xpos, this.ypos, this.count);
+			game.state.start("Level00", true, false, this.xpos, this.ypos, this.count);
 	},
 }
 //---------------------------------------------------------------------//

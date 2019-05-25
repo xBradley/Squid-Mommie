@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Alpha												   //
+//Squid Mommie - Beta												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		boot.js														   //
 //---------------------------------------------------------------------//
@@ -17,12 +17,14 @@ Boot.prototype = {
 		game.load.image("soundWave", "soundwave.png");
 		game.load.image("radialWave", "radial.png");
 		game.load.physics("squidPhysics", "squid.json");
+		game.load.atlas("MommieSheet", "SquidMomSheet.png", "SquidMomSheet.json");
 
 		//loading sounds -Matt
 		game.load.path = "assets/audio/";
 		game.load.audio('theme', ['byeWater.ogg']);
 		game.load.audio('swim', ['squidSwim.ogg']);
 		game.load.path = "assets/audio/Lullaby/";
+		
 		//Loading squid mommie lullabys
 		game.load.audio('sing00', ['Song00.ogg']);
 		game.load.audio('sing01', ['Song01.ogg']);
@@ -30,6 +32,7 @@ Boot.prototype = {
 		game.load.audio('sing03', ['Song03.ogg']);
 		game.load.audio('sing04', ['Song04.ogg']);
 		game.load.audio('sing05', ['Song05.ogg']);
+		
 		//Loading squid baby cries
 		game.load.audio('cry00', ['baby00.ogg']);
 		game.load.audio('cry01', ['baby01.ogg']);
@@ -46,7 +49,7 @@ Boot.prototype = {
 		game.load.spritesheet('caveTiles', 'underwaterCave.png', 16, 16);
 		*/
 
-		//This is loading in the origional map
+		//This is loading in the original map
 		game.load.path = 'assets/map/';
 		game.load.tilemap('world00', 'section00.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('world01', 'section01.json', null, Phaser.Tilemap.TILED_JSON);
@@ -58,7 +61,7 @@ Boot.prototype = {
 	
 	//Boot-up screen
 	create: function() {
-		//console.log("Boot");
+		console.log("Boot");
 		
 		game.stage.backgroundColor = "#deface";
 		game.state.start("Menu", true, false);
