@@ -64,6 +64,39 @@ Level00.prototype = {
 		
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
+
+		//Move Tutorial Text
+		this.moveTutorial = game.add.text(this.mommie.position.x - 100, this.mommie.position.y - 100, "Click or Hold Left Mouse to move me", {
+			fontSize: "14px", 
+			fill: "#fff",
+			font: "Impact", 
+			stroke: "#000",
+			strokeThickness: 2,
+			}
+		);
+		this.moveTutorial.alpha = 0;
+
+		//Sing Tutorial Text
+		this.singTutorial = game.add.text(this.mommie.position.x - 125, this.mommie.position.y - 100, "Press Spacebar to Sing so I can find my babbies", {
+			fontSize: "14px", 
+			fill: "#fff",
+			font: "Impact", 
+			stroke: "#000",
+			strokeThickness: 2,
+			}
+		);
+		this.singTutorial.alpha = 0;
+
+		//Call Tutorial Text
+		this.callTutorial = game.add.text(this.mommie.position.x - 100, this.mommie.position.y - 100, "Sing again when I'm close to call my babbie", {
+			fontSize: "14px", 
+			fill: "#fff",
+			font: "Impact", 
+			stroke: "#000",
+			strokeThickness: 2,
+			}
+		);
+		this.callTutorial.alpha = 0;
 	},
 	
 	//Play update loop
@@ -74,6 +107,132 @@ Level00.prototype = {
 			this.theme.volume -= .01;
 			this.theme2.volume += .01;
 		}
+
+		//Move Tutorial Text
+		//******************************************************//
+		//Fade in and Follow player
+		if (this.moveTutorial.alive == true &&
+			this.moveTutorial.alpha <= 0.9  && 
+			this.moveTutorial.position.x <= 420) {
+			
+			this.moveTutorial.position.x = this.mommie.position.x - 100;
+			this.moveTutorial.position.y = this.mommie.position.y - 100;
+			this.moveTutorial.alpha += 0.01;
+		}
+		//After fade, follow player
+		else if (this.moveTutorial.alive == true &&
+				this.moveTutorial.alpha > 0.9    && 
+				this.moveTutorial.position.x <= 420) {
+			
+			this.moveTutorial.position.x = this.mommie.position.x - 100;
+			this.moveTutorial.position.y = this.mommie.position.y - 100;
+		}
+		//After moving so far, fade out text
+		else if (this.moveTutorial.alive == true     &&
+				this.moveTutorial.position.x >= 420  && 
+				this.moveTutorial.alpha >= 0.1) {
+			
+			this.moveTutorial.alpha -= 0.01;
+		}
+		//After fade, kill text
+		else if (this.moveTutorial.alive == true     &&
+				this.moveTutorial.position.x >= 420  && 
+				this.moveTutorial.alpha < 0.1) {
+			
+			this.moveTutorial.destroy();
+			this.moveTutorial.alpha = 0;
+		}
+		//******************************************************//
+
+		//Sing Tutorial Text
+		//******************************************************//
+		//Fade in text and follow player
+		if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == true  && 
+			this.singTutorial.alpha <= 0.9   &&
+			this.singTutorial.position.y <= 550) {
+			
+			this.singTutorial.position.x = this.mommie.position.x - 125;
+			this.singTutorial.position.y = this.mommie.position.y - 100;
+			this.singTutorial.alpha += 0.01
+		}
+		//After fade is done, just follow player
+		else if (this.moveTutorial.alive == false &&
+				this.singTutorial.alive == true   && 
+				this.singTutorial.alpha > 0.9     &&
+				this.singTutorial.position.y <= 550) {
+			
+			this.singTutorial.position.x = this.mommie.position.x - 125;
+			this.singTutorial.position.y = this.mommie.position.y - 100;
+		}
+		//After moving so far, fade out text, stop following player
+		else if (this.moveTutorial.alive == false &&
+				this.singTutorial.alive == true   && 
+				this.singTutorial.alpha >= 0.1    &&
+				this.singTutorial.position.y > 550) {
+				
+			this.singTutorial.alpha -= 0.01;
+		}
+		//After Fade out, kill text
+		else if (this.moveTutorial.alive == false &&
+				this.singTutorial.alive == true   && 
+				this.singTutorial.alpha < 0.1     &&
+				this.singTutorial.position.y > 550) {
+			
+			this.singTutorial.alpha = 0;
+			this.singTutorial.destroy();
+		}
+		//******************************************************//
+		
+		//Call Tutorial Text 
+		//******************************************************//
+		//Fade in text and follow player
+		if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == false && 
+			this.callTutorial.alive == true  &&
+			this.callTutorial.alpha <= 0.9   &&
+			this.mommie.position.y > 750     &&
+			this.mommie.position.x < 600) {
+			
+			this.callTutorial.position.x = this.mommie.position.x - 125;
+			this.callTutorial.position.y = this.mommie.position.y - 100;
+			this.callTutorial.alpha += 0.01
+		}
+		//After fade is done, just follow player
+		else if (this.moveTutorial.alive == false &&
+				this.singTutorial.alive == false  && 
+				this.callTutorial.alive == true   &&
+				this.callTutorial.alpha > 0.9     &&
+				this.mommie.position.y > 750      &&
+				this.mommie.position.x < 600) {
+			
+			this.callTutorial.position.x = this.mommie.position.x - 125;
+			this.callTutorial.position.y = this.mommie.position.y - 100;
+		}
+		//After moving so far, fade out text, stop following player
+		else if (this.moveTutorial.alive == false &&
+				this.singTutorial.alive == false  && 
+				this.callTutorial.alive == true   && 
+				this.callTutorial.alpha >= 0.1    &&
+				this.mommie.position.y > 750      &&
+				this.mommie.position.x > 600) {
+			
+			this.callTutorial.alpha -= 0.01;
+		}
+		//After Fade out, kill text
+		else if (this.moveTutorial.alive == false &&
+				this.singTutorial.alive == false  && 
+				this.callTutorial.alive == true   && 
+				this.callTutorial.alpha < 0.1     &&
+				this.mommie.position.y > 750      &&
+				this.mommie.position.x > 600) {
+			
+			this.callTutorial.alpha = 0;
+			this.callTutorial.destroy();
+		}
+		//******************************************************//
+		
+		//Path to Level 01
 		if(this.mommie.body.x >= 1850){
 			//console.log("Count: " + this.mommie.getCount());
 
@@ -89,7 +248,7 @@ Level00.prototype = {
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
