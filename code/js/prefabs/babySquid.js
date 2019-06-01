@@ -15,7 +15,7 @@ function babySquid(_game, _x, _y, _key) {
 	
 	//p2 physics and collision stuff
 	game.physics.p2.enable(this, true);
-	this.body.collideWorldBounds = true;
+	this.body.collideWorldBounds = false;
 	this.body.clearShapes();
 	this.body.loadPolygon("squidPhysics", "squid", 0.1);
 	this.body.mass = 0.2;

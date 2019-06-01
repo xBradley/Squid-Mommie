@@ -13,7 +13,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 	//quick fix variable to make the swim sfx play at the right time
 	this.swish = false;
 	this.swim = game.add.audio('swim');
-	
+
 	//making lullaby variables
 	this.song00 = game.add.audio('sing00');
 	this.song01 = game.add.audio('sing01');
@@ -21,19 +21,31 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 	this.song03 = game.add.audio('sing03');
 	this.song04 = game.add.audio('sing04');
 	this.song05 = game.add.audio('sing05');
-	
+	this.song06 = game.add.audio('sing06');
+	this.song07 = game.add.audio('sing07');
+	this.song08 = game.add.audio('sing08');
+	this.song09 = game.add.audio('sing09');
+	this.song10 = game.add.audio('sing10');	
+
 	//making cry variables
 	this.cry00 = game.add.audio('cry00');
 	this.cry01 = game.add.audio('cry01');
 	this.cry02 = game.add.audio('cry02');
 	this.cry03 = game.add.audio('cry03');
 	this.cry04 = game.add.audio('cry04');
+	this.cry05 = game.add.audio('cry05');
+	this.cry06 = game.add.audio('cry06');
+	this.cry07 = game.add.audio('cry07');
+	this.cry08 = game.add.audio('cry08');
+	this.cry09 = game.add.audio('cry09');
+	this.cry10 = game.add.audio('cry10');
+
 	
 	//This here is an array of squid mommie lullabys
-	this.voices = [this.song00, this.song01, this.song02, this.song03, this.song04, this.song05]; 
+	this.voices = [this.song00, this.song01, this.song02, this.song03, this.song04, this.song05, this.song06, this.song07, this.song08, this.song09, this.song10]; 
 	
 	//This is an array of squid baby cries
-	this.cries = [this.cry00, this.cry01, this.cry02, this.cry03, this.cry04]; 
+	this.cries = [this.cry00, this.cry01, this.cry02, this.cry03, this.cry04, this.cry05, this.cry06, this.cry07, this.cry08, this.cry09, this.cry10]; 
 	
 	//set size and anchor
 	this.anchor.setTo(0.5);
@@ -194,7 +206,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
 			//if the player collects all the babies they do their final sing
-			if (babbieCount == 5)
+			if (babbieCount == 10)
 				game.state.start("Gameover", true, false);
 
 			//lullaby
@@ -392,18 +404,14 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 				nearest.body.force.y = Math.sin(angle) * 1500;
 			}
 		}
-
+		//This will collect the baby if squid mommie is close by.
+		if (distance != undefined && distance <= 125 && this.lullaby.isPlaying) {
+			this.collectBaby(nearest);
+		}
 		//adding the feedback sound from the babys
-		if(this.lullaby.isPlaying && this.lullaby.currentTime >= (this.lullaby.durationMS - 300) && ! this.cry.isPlaying) {
+		if(this.lullaby.isPlaying && this.lullaby.currentTime >= (this.lullaby.durationMS - 50) && ! this.cry.isPlaying) {
 			//console.log("beep beep");
-			this.cry.play();	
-			
-			//eat babby if really close
-			//BUG: only works after feedback sounds are done
-			//     doesn't work outside of if
-			if (distance != undefined && distance <= 125) {
-				this.collectBaby(nearest);
-			}
+			this.cry.play();		
 		}
 	}
 }

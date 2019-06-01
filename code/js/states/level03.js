@@ -9,10 +9,13 @@
 var Level03 = function(game) {};
 Level03.prototype = {
 	//initialize variables for mommie
-	init: function(_xpos, _ypos, _count){
+	init: function(_xpos, _ypos, _count, _squad, _theme, _theme2){
 		this.xpos = _xpos;
 		this.ypos = _ypos;
 		this.count = _count;
+		this.squad = _squad;
+		this.theme = _theme;
+		this.theme2 = _theme2;
 	},
 	create: function() {
 		console.log("Level 03");
@@ -42,7 +45,12 @@ Level03.prototype = {
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(800, 637);
+		if(this.squad[7])
+			this.spawnBaby(800, 637);
+		if(this.squad[8])
+			this.spawnBaby(2200, 155);
+		if(this.squad[9])
+			this.spawnBaby(3375, 270);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count);
@@ -53,38 +61,37 @@ Level03.prototype = {
 			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50));
 		}
 
-		//adding map forground above mommie
-		this.foreground = this.map.createLayer('foreground');
-		
-		//foreground2 error invalid layer
-		//this.foreground2 = this.map.createLayer('foreground2');
-
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
+		//adding map forground above mommie
+		this.foreground = this.map.createLayer('foreground');
 	},
 	
 	//Play update loop
 	update: function() {
+		//switching theme the song for the final goodbye
+		if(this.mommie.getCount() == 10 && this.theme2.volume < 0.35){
+			console.log(this.theme2.volume);
+			this.theme.volume -= .01;
+			this.theme2.volume += .01;
+		}
 		if(this.mommie.body.y <= 60){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level01', true, false, 1535, 3085, this.mommie.getCount());
+			game.state.start('Level01', true, false, 1535, 3085, this.mommie.getCount(), this.squad, this.theme, this.theme2);
 
 			this.mommie.destroy();
 			this.babbies.destroy();
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.foreground.destroy();
-			
-			//foreground2 error invalid layer
-			//this.foreground2.destroy();
 		}
 	},
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		//game.debug.pointer(game.input.activePointer);
+		game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
@@ -97,13 +104,11 @@ Level03.prototype = {
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
-
-	//spawn baby, add to world, return baby
+			//spawn baby, add to world, return baby
 	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
 		var babbie = new babySquid(game, _x, _y, "squid");
 		game.add.existing(babbie);
-		
 		return babbie;
-	},
+	}
 }
 //---------------------------------------------------------------------//

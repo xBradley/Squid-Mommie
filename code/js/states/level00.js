@@ -9,13 +9,17 @@
 var Level00 = function(game) {};
 Level00.prototype = {
 	//initialize variables for mommie
-	init: function(_xpos, _ypos, _count){
+	init: function(_xpos, _ypos, _count, _squad, _theme, _theme2){
 		this.xpos = _xpos;
 		this.ypos = _ypos;
 		this.count = _count;
+		this.squad = _squad;
+		this.theme = _theme;
+		this.theme2 = _theme2;
 	},
 
 	create: function() {
+
 		console.log("Level 00");
 
 		//background
@@ -43,8 +47,11 @@ Level00.prototype = {
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(496, 1230);
-		this.spawnBaby(420, 240);
+		if(this.squad[0])
+			this.spawnBaby(496, 1230);
+		if(this.squad[1])
+			this.spawnBaby(1755, 205);
+
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count);
@@ -61,10 +68,16 @@ Level00.prototype = {
 	
 	//Play update loop
 	update: function() {
+		//switching theme the song for the final goodbye
+		if(this.mommie.getCount() == 10 && this.theme2.volume < 0.35){
+			console.log(this.theme2.volume);
+			this.theme.volume -= .01;
+			this.theme2.volume += .01;
+		}
 		if(this.mommie.body.x >= 1850){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level01', true, false, 90, 205, this.mommie.getCount());
+			game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.squad, this.theme, this.theme2);
  
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
@@ -76,7 +89,7 @@ Level00.prototype = {
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		//game.debug.pointer(game.input.activePointer);
+		game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";

@@ -9,10 +9,21 @@
 var Level02 = function(game) {};
 Level02.prototype = {
 	//initialize variables for mommie
-	init: function(_xpos, _ypos, _count){
+	init: function(_xpos, _ypos, _count, _squad, _theme, _theme2){
 		this.xpos = _xpos;
 		this.ypos = _ypos;
 		this.count = _count;
+		this.squad = _squad;
+		this.theme = _theme;
+		this.theme2 = _theme2;
+	},
+	
+	//spawn baby, add to world, return baby
+	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
+		var babbie = new babySquid(game, _x, _y, "squid");
+		game.add.existing(babbie);
+		
+		return babbie;
 	},
 
 	create: function() {
@@ -43,7 +54,8 @@ Level02.prototype = {
 		
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		this.spawnBaby(975, 945);
+		if(this.squad[6])
+			this.spawnBaby(975, 945);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count);
@@ -64,10 +76,16 @@ Level02.prototype = {
 	
 	//Play update loop
 	update: function() {
+		//switching theme the song for the final goodbye
+		if(this.mommie.getCount() == 10 && this.theme2.volume < 0.35){
+			console.log(this.theme2.volume);
+			this.theme.volume -= .01;
+			this.theme2.volume += .01;
+		}
 		if(this.mommie.body.y >= 1860){
 			//console.log("Count: " + this.mommie.getCount());
 			
-			game.state.start('Level01', true, false, 1150, 90, this.mommie.getCount());
+			game.state.start('Level01', true, false, 1150, 90, this.mommie.getCount(), this.squad, this.theme, this.theme2);
 
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
@@ -76,6 +94,13 @@ Level02.prototype = {
 			this.mommie.destroy();
 			this.babbies.destroy();
 		}
+	},
+
+	//spawn baby, add to world, add to group
+	spawnBaby: function(_x = game.world.centerX, _y = game.world.centerY) {
+		var babbie = new babySquid(game, _x, _y, "squid", 1);
+		game.add.existing(babbie);
+		this.babbies.add(babbie);
 	},
 	
 	render: function() {
@@ -86,21 +111,6 @@ Level02.prototype = {
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
 		//game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
-	},
-	
-	//spawn baby, add to world, add to group
-	spawnBaby: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
-		game.add.existing(babbie);
-		this.babbies.add(babbie);
-	},
-
-	//spawn baby, add to world, return baby
-	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
-		game.add.existing(babbie);
-		
-		return babbie;
-	},
+	}
 }
 //---------------------------------------------------------------------//

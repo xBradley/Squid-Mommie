@@ -8,6 +8,9 @@
 //---------------------------------------------------------------------//
 var Boot = function(game) {};
 Boot.prototype = {
+	init: function(_squad){
+		this.squad = _squad;
+	},
 	//Load all assets
 	preload: function() {
 		game.load.path = "assets/img/";
@@ -22,6 +25,7 @@ Boot.prototype = {
 		//loading sounds -Matt
 		game.load.path = "assets/audio/";
 		game.load.audio('theme', ['byeWater.ogg']);
+		game.load.audio('theme2', ['bye.ogg']);
 		game.load.audio('swim', ['squidSwim.ogg']);
 		game.load.path = "assets/audio/Lullaby/";
 		
@@ -32,6 +36,11 @@ Boot.prototype = {
 		game.load.audio('sing03', ['Song03.ogg']);
 		game.load.audio('sing04', ['Song04.ogg']);
 		game.load.audio('sing05', ['Song05.ogg']);
+		game.load.audio('sing06', ['Song06.ogg']);
+		game.load.audio('sing07', ['Song07.ogg']);
+		game.load.audio('sing08', ['Song08.ogg']);
+		game.load.audio('sing09', ['Song09.ogg']);
+		game.load.audio('sing10', ['Song10.ogg']);
 		
 		//Loading squid baby cries
 		game.load.audio('cry00', ['baby00.ogg']);
@@ -39,6 +48,13 @@ Boot.prototype = {
 		game.load.audio('cry02', ['baby02.ogg']);
 		game.load.audio('cry03', ['baby03.ogg']);
 		game.load.audio('cry04', ['baby04.ogg']);
+		game.load.audio('cry05', ['baby05.ogg']);
+		game.load.audio('cry06', ['baby06.ogg']);
+		game.load.audio('cry07', ['baby07.ogg']);
+		game.load.audio('cry08', ['baby08.ogg']);
+		game.load.audio('cry09', ['baby09.ogg']);
+		game.load.audio('cry10', ['baby10.ogg']);
+
 		//end sound loading
 
 		//Adding map assets. Lemme know if you are curious about any of these parts -Matt
@@ -64,7 +80,7 @@ Boot.prototype = {
 		console.log("Boot");
 		
 		game.stage.backgroundColor = "#deface";
-		game.state.start("Menu", true, false);
+		game.state.start("Menu", true, false, this.squad);
 	},
 }
 //---------------------------------------------------------------------//

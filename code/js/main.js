@@ -16,6 +16,11 @@ var config = {
 //Create new instance of a game
 var game = new Phaser.Game(config);
 
+//global array to manage baby squid spawning
+var squad = [true, true, true, true, true, true, true, true, true, true];
+
+//console.log(this.squad);
+
 //Add each state to the manager and start with MainMenu
 window.onload = function() {
 	game.state.add("Boot", Boot);
@@ -25,6 +30,6 @@ window.onload = function() {
 	game.state.add("Level02", Level02);	
 	game.state.add("Level03", Level03);
 	game.state.add("Gameover", Gameover);
-	game.state.start("Boot", true, true);
+	game.state.start("Boot", false, true, this.squad);
 }
 //---------------------------------------------------------------------//
