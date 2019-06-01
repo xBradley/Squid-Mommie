@@ -46,7 +46,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 	game.physics.p2.enable(this, false);
 	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
-	this.body.addCapsule(50, 35);
+	this.body.addCapsule(15, 30);
 	this.body.mass = 6;
 	this.body.inertia = 0; 
 	
@@ -108,6 +108,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 
 	//add constraints to mommie and babbies
 	this.attachBaby = function(babbie) {
+		//game.physics.p2.createLockConstraint(this,babbie, [50,0], 0, 150);
 		game.physics.p2.createDistanceConstraint(this, babbie, 80, [0,0], [0,0],150);
 		game.physics.p2.createGearConstraint(this, babbie, 1, 1);
 	}
@@ -148,8 +149,8 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 			angle = Phaser.Math.normalizeAngle(angle);
 			
 			//move to mouse
-			this.body.force.x = Math.cos(angle) * 350;
-			this.body.force.y = Math.sin(angle) * 350;
+			this.body.velocity.x = Math.cos(angle) * 100;
+			this.body.velocity.y = Math.sin(angle) * 100;
 
 			//squid sound section
 			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {
