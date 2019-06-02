@@ -27,9 +27,9 @@ Boot.prototype = {
 		game.load.audio('theme', ['byeWater.ogg']);
 		game.load.audio('theme2', ['bye.ogg']);
 		game.load.audio('swim', ['squidSwim.ogg']);
-		game.load.path = "assets/audio/lullaby/";
 		
 		//Loading squid mommie lullabys
+		game.load.path = "assets/audio/lullaby/";
 		game.load.audio('sing00', ['Song00.ogg']);
 		game.load.audio('sing01', ['Song01.ogg']);
 		game.load.audio('sing02', ['Song02.ogg']);
