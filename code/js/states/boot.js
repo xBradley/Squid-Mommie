@@ -19,6 +19,9 @@ Boot.prototype = {
 		game.load.image("arrow", "arrow.png");
 		game.load.image("soundWave", "soundwave.png");
 		game.load.image("radialWave", "radial.png");
+		game.load.image("aliveBabbie", "aliveBabbie.png");
+		game.load.image("deadBabbie", "deadBabbie.png");
+		game.load.image("mommieHalo", "halo.png");
 		game.load.physics("squidPhysics", "squid.json");
 		game.load.atlas("MommieSheet", "SquidMomSheet.png", "SquidMomSheet.json");
 

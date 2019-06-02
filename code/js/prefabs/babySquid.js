@@ -11,13 +11,14 @@ function babySquid(_game, _x, _y, _key) {
 	
 	//set size and anchor
 	this.anchor.setTo(0.5);
-	this.scale.setTo(0.1);
+	this.scale.setTo(0.5);
+	this.alpha = 0.5;
 	
 	//p2 physics and collision stuff
-	game.physics.p2.enable(this, true);
-	this.body.collideWorldBounds = false;
+	game.physics.p2.enable(this, false);
+	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
-	this.body.loadPolygon("squidPhysics", "squid", 0.1);
+	this.body.addRectangle(10, 30);
 	this.body.mass = 0.2;
 }
 

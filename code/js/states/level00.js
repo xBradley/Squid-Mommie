@@ -32,7 +32,7 @@ Level00.prototype = {
 	    game.physics.p2.setImpactEvents(true); 
 		game.physics.p2.gravity.y = 0;
 
-		//This is for the origional map I made that will probably work for testing.
+		//This is for the original map I made that will probably work for testing.
 		this.map = game.add.tilemap('world00');
 		this.map.addTilesetImage('slopes', 'slopes');
 		this.backgroundLayer = this.map.createLayer('background');
@@ -52,7 +52,6 @@ Level00.prototype = {
 		if(this.squad[1])
 			this.spawnBaby(1755, 205);
 
-		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count);
 		game.add.existing(this.mommie);
@@ -257,14 +256,14 @@ Level00.prototype = {
 	
 	//spawn baby, add to world, add to group
 	spawnBaby: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
 	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
 		
 		return babbie;
