@@ -90,14 +90,14 @@ Level02.prototype = {
 	
 	//spawn baby, add to world, add to group
 	spawnBaby: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
 	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
 		
 		return babbie;

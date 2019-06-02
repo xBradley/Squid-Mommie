@@ -48,7 +48,19 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 	this.body.clearShapes();
 	this.body.addCapsule(15, 30);
 	this.body.mass = 6;
-	this.body.inertia = 0; 
+	this.body.inertia = 0;
+	
+	//mommie is dead ---- halo stuff
+	this.halo = game.add.sprite(_x, _y - 50, "mommieHalo");
+	game.physics.p2.enable(this.halo, false);
+	this.halo.scale.setTo(0.3);
+	this.halo.anchor.setTo(0.5);
+	this.halo.alpha = 0.75;
+	this.halo.body.clearShapes();
+	this.halo.body.addRectangle(10, 30);
+	this.halo.body.mass = 0.1;
+	game.physics.p2.createLockConstraint(this,this.halo, [-50,-5], 0, 200);
+
 	
 	//Soundwave Particle Emitter
 	var sLifespan = 2000;

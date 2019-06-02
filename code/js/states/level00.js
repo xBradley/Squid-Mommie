@@ -28,7 +28,7 @@ Level00.prototype = {
 	    game.physics.p2.setImpactEvents(true); 
 		game.physics.p2.gravity.y = 0;
 
-		//This is for the origional map I made that will probably work for testing.
+		//This is for the original map I made that will probably work for testing.
 		this.map = game.add.tilemap('world00');
 		this.map.addTilesetImage('slopes', 'slopes');
 		this.backgroundLayer = this.map.createLayer('background');
@@ -45,7 +45,7 @@ Level00.prototype = {
 		this.babbies = game.add.group();
 		this.spawnBaby(496, 1230);
 		//this.spawnBaby(420, 240);
-		
+
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count);
 		game.add.existing(this.mommie);
@@ -234,7 +234,7 @@ Level00.prototype = {
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
-		game.debug.spriteCoords(this.mommie, 32, 500);
+		//game.debug.spriteCoords(this.mommie, 32, 500);
 		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
@@ -244,14 +244,14 @@ Level00.prototype = {
 	
 	//spawn baby, add to world, add to group
 	spawnBaby: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
 	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
 		
 		return babbie;
