@@ -91,7 +91,7 @@ Level03.prototype = {
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
@@ -100,14 +100,15 @@ Level03.prototype = {
 	
 	//spawn baby, add to world, add to group
 	spawnBaby: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 			//spawn baby, add to world, return baby
 	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "squid");
+		var babbie = new babySquid(game, _x, _y, "deadBabbie");
 		game.add.existing(babbie);
+		
 		return babbie;
 	}
 }

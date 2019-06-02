@@ -11,6 +11,7 @@ Boot.prototype = {
 	init: function(_squad){
 		this.squad = _squad;
 	},
+	
 	//Load all assets
 	preload: function() {
 		game.load.path = "assets/img/";
@@ -19,6 +20,9 @@ Boot.prototype = {
 		game.load.image("arrow", "arrow.png");
 		game.load.image("soundWave", "soundwave.png");
 		game.load.image("radialWave", "radial.png");
+		game.load.image("aliveBabbie", "aliveBabbie.png");
+		game.load.image("deadBabbie", "deadBabbie.png");
+		game.load.image("mommieHalo", "halo.png");
 		game.load.physics("squidPhysics", "squid.json");
 		game.load.atlas("MommieSheet", "SquidMomSheet.png", "SquidMomSheet.json");
 
@@ -27,9 +31,9 @@ Boot.prototype = {
 		game.load.audio('theme', ['byeWater.ogg']);
 		game.load.audio('theme2', ['bye.ogg']);
 		game.load.audio('swim', ['squidSwim.ogg']);
-		game.load.path = "assets/audio/Lullaby/";
 		
 		//Loading squid mommie lullabys
+		game.load.path = "assets/audio/lullaby/";
 		game.load.audio('sing00', ['Song00.ogg']);
 		game.load.audio('sing01', ['Song01.ogg']);
 		game.load.audio('sing02', ['Song02.ogg']);

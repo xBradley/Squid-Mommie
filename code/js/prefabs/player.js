@@ -58,9 +58,21 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 	game.physics.p2.enable(this, false);
 	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
-	this.body.addCapsule(50, 35);
+	this.body.addCapsule(15, 30);
 	this.body.mass = 6;
-	this.body.inertia = 0; 
+	this.body.inertia = 0;
+	
+	//mommie is dead ---- halo stuff
+	this.halo = game.add.sprite(_x, _y - 50, "mommieHalo");
+	game.physics.p2.enable(this.halo, false);
+	this.halo.scale.setTo(0.3);
+	this.halo.anchor.setTo(0.5);
+	this.halo.alpha = 0.75;
+	this.halo.body.clearShapes();
+	this.halo.body.addRectangle(10, 30);
+	this.halo.body.mass = 0.1;
+	game.physics.p2.createLockConstraint(this,this.halo, [-50,-5], 0, 200);
+
 	
 	//Soundwave Particle Emitter
 	var sLifespan = 2000;
@@ -120,6 +132,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 
 	//add constraints to mommie and babbies
 	this.attachBaby = function(babbie) {
+		//game.physics.p2.createLockConstraint(this,babbie, [50,0], 0, 150);
 		game.physics.p2.createDistanceConstraint(this, babbie, 80, [0,0], [0,0],150);
 		game.physics.p2.createGearConstraint(this, babbie, 1, 1);
 	}
@@ -160,8 +173,8 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 			angle = Phaser.Math.normalizeAngle(angle);
 			
 			//move to mouse
-			this.body.force.x = Math.cos(angle) * 350;
-			this.body.force.y = Math.sin(angle) * 350;
+			this.body.velocity.x = Math.cos(angle) * 100;
+			this.body.velocity.y = Math.sin(angle) * 100;
 
 			//squid sound section
 			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {
@@ -221,6 +234,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 			var angle;
 			var far = 400;
 			var near = 200;
+			var touch = 100;
 			//if distance is greater than 400,
 			//find angle between player to nearest and make far soundwave
 			if (distance >= far) {
@@ -404,13 +418,19 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 				nearest.body.force.y = Math.sin(angle) * 1500;
 			}
 		}
+
 		//This will collect the baby if squid mommie is close by.
-		if (distance != undefined && distance <= 125 && this.lullaby.isPlaying) {
+		if (distance != undefined && 
+			distance <= touch     && this.lullaby.isPlaying) {
+			
 			this.collectBaby(nearest);
 		}
+		
 		//adding the feedback sound from the babys
-		if(this.lullaby.isPlaying && this.lullaby.currentTime >= (this.lullaby.durationMS - 50) && ! this.cry.isPlaying) {
-			//console.log("beep beep");
+		if(this.lullaby.isPlaying && 
+			this.lullaby.currentTime >= (this.lullaby.durationMS - 50) && 
+			!this.cry.isPlaying) {
+			
 			this.cry.play();		
 		}
 	}
