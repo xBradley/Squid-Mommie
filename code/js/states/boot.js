@@ -11,6 +11,7 @@ Boot.prototype = {
 	init: function(_squad){
 		this.squad = _squad;
 	},
+	
 	//Load all assets
 	preload: function() {
 		game.load.path = "assets/img/";

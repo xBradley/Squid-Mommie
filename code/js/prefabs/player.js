@@ -234,6 +234,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 			var angle;
 			var far = 400;
 			var near = 200;
+			var touch = 100;
 			//if distance is greater than 400,
 			//find angle between player to nearest and make far soundwave
 			if (distance >= far) {
@@ -417,13 +418,19 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 				nearest.body.force.y = Math.sin(angle) * 1500;
 			}
 		}
+
 		//This will collect the baby if squid mommie is close by.
-		if (distance != undefined && distance <= 125 && this.lullaby.isPlaying) {
+		if (distance != undefined && 
+			distance <= touch     && this.lullaby.isPlaying) {
+			
 			this.collectBaby(nearest);
 		}
+		
 		//adding the feedback sound from the babys
-		if(this.lullaby.isPlaying && this.lullaby.currentTime >= (this.lullaby.durationMS - 50) && ! this.cry.isPlaying) {
-			//console.log("beep beep");
+		if(this.lullaby.isPlaying && 
+			this.lullaby.currentTime >= (this.lullaby.durationMS - 50) && 
+			!this.cry.isPlaying) {
+			
 			this.cry.play();		
 		}
 	}
