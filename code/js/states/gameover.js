@@ -24,8 +24,11 @@ Gameover.prototype = {
 
     update: function() {
         //restart game on spacebar
-		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			game.state.start("Boot", true, true);
+		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
+            
+            resetGlobals();
+            game.state.start("Boot", true, true);
+        }
 	},
 }
 //---------------------------------------------------------------------//

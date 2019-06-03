@@ -9,17 +9,15 @@
 var Level00 = function(game) {};
 Level00.prototype = {
 	//initialize variables for mommie
-	init: function(_xpos, _ypos, _count, _squad, _theme, _theme2){
+	init: function(_xpos, _ypos, _count, _theme, _theme2){
 		this.xpos = _xpos;
 		this.ypos = _ypos;
 		this.count = _count;
-		this.squad = _squad;
 		this.theme = _theme;
 		this.theme2 = _theme2;
 	},
 
 	create: function() {
-
 		console.log("Level 00");
 
 		//background
@@ -44,16 +42,17 @@ Level00.prototype = {
         game.physics.p2.convertTilemap(this.map, this.wallLayer);
         this.wallCollisionsGroup = game.physics.p2.createCollisionGroup();
         this.wallBodies = game.physics.p2.convertTilemap(this.map, this.wallLayer);
-		
+
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		if(this.squad[0])
-			this.spawnBaby(496, 1230);
-		if(this.squad[1])
-			this.spawnBaby(1755, 205);
+		if(squad[0][0])
+			this.spawnBaby(496, 1230, [0,0]);
+		
+		if(squad[0][1])
+			this.spawnBaby(1755, 205, [0,1]);
 
 		//add player character (mommie)
-		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count);
+		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 0);
 		game.add.existing(this.mommie);
 		
 		//add babbie followers
@@ -109,125 +108,134 @@ Level00.prototype = {
 
 		//Move Tutorial Text
 		//******************************************************//
-		//Fade in and Follow player
-		if (this.moveTutorial.alive == true &&
-			this.moveTutorial.alpha <= 0.9  && 
+		if (tutorial[0] == true) {
+			//Fade in and Follow player
+			if (this.moveTutorial.alive == true &&
+			this.moveTutorial.alpha <= 0.9      && 
 			this.moveTutorial.position.x <= 420) {
 			
-			this.moveTutorial.position.x = this.mommie.position.x - 100;
-			this.moveTutorial.position.y = this.mommie.position.y - 100;
-			this.moveTutorial.alpha += 0.01;
-		}
-		//After fade, follow player
-		else if (this.moveTutorial.alive == true &&
-				this.moveTutorial.alpha > 0.9    && 
-				this.moveTutorial.position.x <= 420) {
+				this.moveTutorial.position.x = this.mommie.position.x - 100;
+				this.moveTutorial.position.y = this.mommie.position.y - 100;
+				this.moveTutorial.alpha += 0.01;
+			}
+			//After fade, follow player
+			else if (this.moveTutorial.alive == true &&
+			this.moveTutorial.alpha > 0.9            && 
+			this.moveTutorial.position.x <= 420) {
 			
-			this.moveTutorial.position.x = this.mommie.position.x - 100;
-			this.moveTutorial.position.y = this.mommie.position.y - 100;
-		}
-		//After moving so far, fade out text
-		else if (this.moveTutorial.alive == true     &&
-				this.moveTutorial.position.x >= 420  && 
-				this.moveTutorial.alpha >= 0.1) {
+				this.moveTutorial.position.x = this.mommie.position.x - 100;
+				this.moveTutorial.position.y = this.mommie.position.y - 100;
+			}
+			//After moving so far, fade out text
+			else if (this.moveTutorial.alive == true &&
+			this.moveTutorial.position.x >= 420      && 
+			this.moveTutorial.alpha >= 0.1) {
 			
-			this.moveTutorial.alpha -= 0.01;
-		}
-		//After fade, kill text
-		else if (this.moveTutorial.alive == true     &&
-				this.moveTutorial.position.x >= 420  && 
-				this.moveTutorial.alpha < 0.1) {
+				this.moveTutorial.alpha -= 0.01;
+			}
+			//After fade, kill text
+			else if (this.moveTutorial.alive == true &&
+			this.moveTutorial.position.x >= 420      && 
+			this.moveTutorial.alpha < 0.1) {
 			
-			this.moveTutorial.destroy();
-			this.moveTutorial.alpha = 0;
+				this.moveTutorial.destroy();
+				this.moveTutorial.alpha = 0;
+				tutorial[0] = false;
+			}
 		}
 		//******************************************************//
 
 		//Sing Tutorial Text
 		//******************************************************//
-		//Fade in text and follow player
-		if (this.moveTutorial.alive == false &&
-			this.singTutorial.alive == true  && 
-			this.singTutorial.alpha <= 0.9   &&
-			this.singTutorial.position.y <= 550) {
+		if (tutorial[1] == true) {
+			//Fade in text and follow player
+			if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == true      && 
+			this.singTutorial.alpha <= 0.9       &&
+			this.singTutorial.position.y <= 666) {
 			
-			this.singTutorial.position.x = this.mommie.position.x - 125;
-			this.singTutorial.position.y = this.mommie.position.y - 100;
-			this.singTutorial.alpha += 0.01
-		}
-		//After fade is done, just follow player
-		else if (this.moveTutorial.alive == false &&
-				this.singTutorial.alive == true   && 
-				this.singTutorial.alpha > 0.9     &&
-				this.singTutorial.position.y <= 550) {
+				this.singTutorial.position.x = this.mommie.position.x - 125;
+				this.singTutorial.position.y = this.mommie.position.y - 100;
+				this.singTutorial.alpha += 0.01
+			}
+			//After fade is done, just follow player
+			else if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == true           && 
+			this.singTutorial.alpha > 0.9             &&
+			this.singTutorial.position.y <= 666) {
 			
-			this.singTutorial.position.x = this.mommie.position.x - 125;
-			this.singTutorial.position.y = this.mommie.position.y - 100;
-		}
-		//After moving so far, fade out text, stop following player
-		else if (this.moveTutorial.alive == false &&
-				this.singTutorial.alive == true   && 
-				this.singTutorial.alpha >= 0.1    &&
-				this.singTutorial.position.y > 550) {
+				this.singTutorial.position.x = this.mommie.position.x - 125;
+				this.singTutorial.position.y = this.mommie.position.y - 100;
+			}
+			//After moving so far, fade out text, stop following player
+			else if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == true           && 
+			this.singTutorial.alpha >= 0.1            &&
+			this.singTutorial.position.y > 666) {
 				
-			this.singTutorial.alpha -= 0.01;
-		}
-		//After Fade out, kill text
-		else if (this.moveTutorial.alive == false &&
-				this.singTutorial.alive == true   && 
-				this.singTutorial.alpha < 0.1     &&
-				this.singTutorial.position.y > 550) {
+				this.singTutorial.alpha -= 0.01;
+			}
+			//After Fade out, kill text
+			else if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == true           && 
+			this.singTutorial.alpha < 0.1             &&
+			this.singTutorial.position.y > 666) {
 			
-			this.singTutorial.alpha = 0;
-			this.singTutorial.destroy();
+				this.singTutorial.alpha = 0;
+				this.singTutorial.destroy();
+				tutorial[1] = false;
+			}
 		}
 		//******************************************************//
 		
 		//Call Tutorial Text 
 		//******************************************************//
-		//Fade in text and follow player
-		if (this.moveTutorial.alive == false &&
-			this.singTutorial.alive == false && 
-			this.callTutorial.alive == true  &&
-			this.callTutorial.alpha <= 0.9   &&
-			this.mommie.position.y > 750     &&
-			this.mommie.position.x < 600) {
+		if (tutorial[2] == true) {
+			//Fade in text and follow player
+			if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == false     && 
+			this.callTutorial.alive == true      &&
+			this.callTutorial.alpha <= 0.9       &&
+			this.mommie.position.y > 750         &&
+			this.mommie.position.x < 666) {
 			
-			this.callTutorial.position.x = this.mommie.position.x - 125;
-			this.callTutorial.position.y = this.mommie.position.y - 100;
-			this.callTutorial.alpha += 0.01
-		}
-		//After fade is done, just follow player
-		else if (this.moveTutorial.alive == false &&
-				this.singTutorial.alive == false  && 
-				this.callTutorial.alive == true   &&
-				this.callTutorial.alpha > 0.9     &&
-				this.mommie.position.y > 750      &&
-				this.mommie.position.x < 600) {
+				this.callTutorial.position.x = this.mommie.position.x - 125;
+				this.callTutorial.position.y = this.mommie.position.y - 100;
+				this.callTutorial.alpha += 0.01
+			}
+			//After fade is done, just follow player
+			else if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == false          && 
+			this.callTutorial.alive == true           &&
+			this.callTutorial.alpha > 0.9             &&
+			this.mommie.position.y > 750              &&
+			this.mommie.position.x < 666) {
 			
-			this.callTutorial.position.x = this.mommie.position.x - 125;
-			this.callTutorial.position.y = this.mommie.position.y - 100;
-		}
-		//After moving so far, fade out text, stop following player
-		else if (this.moveTutorial.alive == false &&
-				this.singTutorial.alive == false  && 
-				this.callTutorial.alive == true   && 
-				this.callTutorial.alpha >= 0.1    &&
-				this.mommie.position.y > 750      &&
-				this.mommie.position.x > 600) {
+				this.callTutorial.position.x = this.mommie.position.x - 125;
+				this.callTutorial.position.y = this.mommie.position.y - 100;
+			}
+			//After moving so far, fade out text, stop following player
+			else if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == false          && 
+			this.callTutorial.alive == true           && 
+			this.callTutorial.alpha >= 0.1            &&
+			this.mommie.position.y > 750              &&
+			this.mommie.position.x > 666) {
 			
-			this.callTutorial.alpha -= 0.01;
-		}
-		//After Fade out, kill text
-		else if (this.moveTutorial.alive == false &&
-				this.singTutorial.alive == false  && 
-				this.callTutorial.alive == true   && 
-				this.callTutorial.alpha < 0.1     &&
-				this.mommie.position.y > 750      &&
-				this.mommie.position.x > 600) {
+				this.callTutorial.alpha -= 0.01;
+			}
+			//After Fade out, kill text
+			else if (this.moveTutorial.alive == false &&
+			this.singTutorial.alive == false          && 
+			this.callTutorial.alive == true           && 
+			this.callTutorial.alpha < 0.1             &&
+			this.mommie.position.y > 750              &&
+			this.mommie.position.x > 666) {
 			
-			this.callTutorial.alpha = 0;
-			this.callTutorial.destroy();
+				this.callTutorial.alpha = 0;
+				this.callTutorial.destroy();
+				tutorial[2] = false;
+			}
 		}
 		//******************************************************//
 		
@@ -235,7 +243,7 @@ Level00.prototype = {
 		if(this.mommie.body.x >= 1850){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.squad, this.theme, this.theme2);
+			game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.theme, this.theme2);
  
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
@@ -255,15 +263,15 @@ Level00.prototype = {
 	},
 	
 	//spawn baby, add to world, add to group
-	spawnBaby: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie");
+	spawnBaby: function(_x, _y, _arr) {
+		var babbie = new babySquid(game, _x, _y, "deadBabbie",_arr[0],_arr[1]);
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
-	spawnFollower: function(_x = game.world.centerX, _y = game.world.centerY) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie");
+	spawnFollower: function(_x, _y) {
+		var babbie = new babySquid(game, _x, _y, "deadBabbie", null, null);
 		game.add.existing(babbie);
 		
 		return babbie;

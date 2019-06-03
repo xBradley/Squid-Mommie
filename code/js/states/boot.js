@@ -8,9 +8,6 @@
 //---------------------------------------------------------------------//
 var Boot = function(game) {};
 Boot.prototype = {
-	init: function(_squad){
-		this.squad = _squad;
-	},
 	
 	//Load all assets
 	preload: function() {
@@ -84,7 +81,7 @@ Boot.prototype = {
 		console.log("Boot");
 		
 		game.stage.backgroundColor = "#deface";
-		game.state.start("Menu", true, false, this.squad);
+		game.state.start("Menu", true, false);
 	},
 }
 //---------------------------------------------------------------------//

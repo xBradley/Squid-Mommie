@@ -6,7 +6,7 @@
 
 "use strict";
 //---------------------------------------------------------------------//
-function player(_game, _x, _y, _key, _babbies, _count) {
+function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
 
 	//Adding Audio Variables
@@ -105,6 +105,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 	
 	//babbies eaten count
 	var babbieCount = _count;
+	var levelNumber = _lvl;
 	
 	//function to count eaten babbies
 	this.incrementCount = function() {
@@ -116,23 +117,94 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 		return babbieCount;
 	}
 
+	//getter function for which level mommie is in 
+	this.getLevel = function() {
+		return levelNumber;
+	}
+
+	this.checkLevelBabbie = function(level) {
+		for (var i = 0; i < level.length; ++i) {
+			if (level[i] == true)
+				return true;
+		}
+
+	}
+
 	//get closest baby from player
 	this.findNearest = function() {
-		return _babbies.getClosestTo(this); 
+		var nearestBabbie = _babbies.getClosestTo(this); 
+		var nearestArea = { 
+			position: new Phaser.Point(), 
+			body: null,
+		};
+
+		
+		if (nearestBabbie == null) {
+			
+			var possibleLevels = [];
+			for (var i = 0; i < squad.length; ++i) {
+				if (this.checkLevelBabbie(squad[i]))
+					possibleLevels.push(i);
+			}
+
+			//console.log(possibleLevels);
+
+			if (this.getLevel() == 0) {
+				nearestArea.position = guide[0][1];
+			}
+			else if (this.getLevel() == 1) {
+				if (possibleLevels.length > 0) {
+					nearestArea.position = guide[1][possibleLevels[0]];
+					var min = Phaser.Math.distance(this.position.x,
+											this.position.y,
+											nearestArea.position.x,
+											nearestArea.position.y);
+				
+				
+					for (var i = 1; i < possibleLevels.length; ++i) {
+						let temp = Phaser.Math.distance(this.position.x,
+												this.position.y,
+												guide[1][possibleLevels[i]].x,
+												guide[1][possibleLevels[i]].y)
+						if (min > temp) {
+							min = temp;
+							nearestArea.position = guide[1][possibleLevels[i]];
+						}
+					}
+				}
+				else
+					nearestArea.position = guide[1][3];
+			}
+			else if (this.getLevel() == 2) {
+				nearestArea.position = guide[2][1];
+			}
+			else if (this.getLevel() == 3) {
+				if (possibleLevels.length > 0)
+					nearestArea.position = guide[3][1];
+				else {
+					nearestArea.position.x = 1420;
+					nearestArea.position.y = 420;
+				}
+			}
+			return nearestArea;
+		}
+		return nearestBabbie;
 	}
 
 	//eat baby, increment count, attach to mommie
 	this.collectBaby = function(babbie) {
 		this.incrementCount();
 		_babbies.remove(babbie, false);
+		squad[babbie.getLevel()][babbie.getId()] = false;
+		
+		console.log(squad);
 		game.add.existing(babbie);
-
 		this.attachBaby(babbie);
 	}
 
 	//add constraints to mommie and babbies
 	this.attachBaby = function(babbie) {
-		//game.physics.p2.createLockConstraint(this,babbie, [50,0], 0, 150);
+		
 		game.physics.p2.createDistanceConstraint(this, babbie, 80, [0,0], [0,0],150);
 		game.physics.p2.createGearConstraint(this, babbie, 1, 1);
 	}
@@ -173,8 +245,8 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 			angle = Phaser.Math.normalizeAngle(angle);
 			
 			//move to mouse
-			this.body.velocity.x = Math.cos(angle) * 100;
-			this.body.velocity.y = Math.sin(angle) * 100;
+			this.body.velocity.x = Math.cos(angle) * 500;
+			this.body.velocity.y = Math.sin(angle) * 500;
 
 			//squid sound section
 			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {
@@ -206,11 +278,9 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 		//if nearest is defined, find distance from player to nearest
 		//else distance is undefined
 		(nearest != null) ? 
-			distance = Phaser.Math.distance(this.position.x, 
-											this.position.y,
-										    nearest.position.x, 
-											nearest.position.y)
-			: distance = undefined;
+		distance = Phaser.Math.distance(this.position.x, this.position.y,
+										nearest.position.x, nearest.position.y)
+		: distance = undefined;
 		
 		//sound arrays
 		this.lullaby = this.voices[this.getCount()];
@@ -234,15 +304,15 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 			var angle;
 			var far = 400;
 			var near = 200;
-			var touch = 100;
+			var touch = 150;
 			//if distance is greater than 400,
 			//find angle between player to nearest and make far soundwave
 			if (distance >= far) {
 				//console.log("Far: " + distance);
 				
 				//find angle
-				angle = Phaser.Math.angleBetweenPoints(this.position, 									  nearest.position);
-				
+				angle = Phaser.Math.angleBetweenPoints(this.position,		 									nearest.position);
+
 				//convert to degrees and range to [0-360]
 				angle = Phaser.Math.radToDeg(Phaser.Math.reverseAngle(angle));
 				
@@ -253,7 +323,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 					//console.log("below");
 					
 					//adjust y for being at top edge of the screen
-					//else move y to bottom edge
+					//else move y to bottom edgej
 					if (game.camera.atLimit.y == true &&
 						game.camera.atLimit.x == false )
 						soundDirY += 450;
@@ -286,7 +356,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 					this.soundWaveEmitter.emitY = -1 * soundDirX;
 				}
 				else if (angle > 45 && angle < 135) {
-					//console.log("up");
+					//console.log("above");
 
 					//adjust y for being at bottom edge of the screen
 					//else move y to top edge
@@ -364,8 +434,50 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 				this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
 			}
 			//if distance is less than 200,
+			//find angle between player to nearest and make near soundwave
+			else if(distance <= near && nearest.body == null) {
+				//console.log("Near: " + distance);
+
+				//find angle
+				angle = Phaser.Math.angleBetweenPoints(this.position, 									  nearest.position);
+				
+				//convert to degrees and range to [0-360]
+				angle = Phaser.Math.radToDeg(Phaser.Math.reverseAngle(angle));
+				
+				//set sound directions to mommie's position
+				var soundDirX = nearest.position.x;
+				var soundDirY = nearest.position.y;
+				if (angle > 225 && angle < 315) {
+					//set soundwave position and angle
+					this.soundWaveEmitter.angle = 0;
+					this.soundWaveEmitter.emitX = 1 * soundDirX;
+					this.soundWaveEmitter.emitY = 1 * soundDirY;
+				}
+				else if (angle >= 315 && angle <= 360 || 
+					     angle >= 0   && angle <= 45) {
+					//set soundwave position and angle
+					this.soundWaveEmitter.angle = 90;
+					this.soundWaveEmitter.emitX =  1 * soundDirY;
+					this.soundWaveEmitter.emitY = -1 * soundDirX;
+				}
+				else if (angle > 45 && angle < 135) {
+					//set soundwave position and angle
+					this.soundWaveEmitter.angle = 180;
+					this.soundWaveEmitter.emitX = -1 * soundDirX;
+					this.soundWaveEmitter.emitY = -1 * soundDirY;
+				}
+				else if (angle >= 135 && angle <= 225) {
+					//set soundwave position and angle
+					this.soundWaveEmitter.angle = 270;
+					this.soundWaveEmitter.emitX = -1 * soundDirY;
+					this.soundWaveEmitter.emitY =  1 * soundDirX;
+				}
+				//emit sound waves
+				this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
+			}
+			//if distance is less than 200,
 			//find angle between nearest to players, rotate, move babby
-			else if(distance <= near) {
+			else if(distance <= near && nearest.body != null) {
 				//console.log("Far: " + distance);
 
 				//find angle
@@ -420,8 +532,7 @@ function player(_game, _x, _y, _key, _babbies, _count) {
 		}
 
 		//This will collect the baby if squid mommie is close by.
-		if (distance != undefined && 
-			distance <= touch     && this.lullaby.isPlaying) {
+		if (distance != undefined && distance <= touch && this.lullaby.isPlaying && nearest.body != null) {
 			
 			this.collectBaby(nearest);
 		}
