@@ -75,9 +75,7 @@ Menu.prototype = {
 					  }
 		);
 
-	//	this.xpos = 416;
-	//	this.ypos = 384;
-	this.xpos = 550;
+	this.xpos = 416;
 	this.ypos = 384;
 		this.count = 0;
 	},
@@ -86,7 +84,7 @@ Menu.prototype = {
 
 		//start game on spacebar
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			game.state.start("Level02", true, false, this.xpos, this.ypos, this.count, this.theme, this.theme2);
+			game.state.start("Level00", true, false, this.xpos, this.ypos, this.count, this.theme, this.theme2);
 	},
 }
 //---------------------------------------------------------------------//
