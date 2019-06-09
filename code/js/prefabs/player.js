@@ -158,10 +158,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 			game.add.tween(followers[i]).to( {
 				alpha: 0, 
 			}, 2000, "Linear", true, 1000);
-			
 		}
-
-
 	}
 
 
@@ -256,8 +253,10 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 		squad[babbie.getLevel()][babbie.getId()] = false;
 		
 		game.add.existing(babbie);
-		this.attachBaby(babbie);
-		followers.push(babbie);
+		babbie.setMommie(this);
+		babbie.eat();
+		//this.attachBaby(babbie);
+		
 		this.incrementLight();
 	}
 
@@ -345,6 +344,9 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 		this.lullaby = this.voices[this.getCount()];
 		this.cry = this.cries[this.getCount()];
 		
+		var far = 450;
+		var near = 200;
+		var touch = 75;
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
 
@@ -359,9 +361,6 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 			game.world.bringToTop(this.soundWaveEmitter);
 			
 			var angle;
-			var far = 450;
-			var near = 250;
-			var touch = 150;
 			//if distance is greater than 400,
 			//find angle between player to nearest and make far soundwave
 			if (distance >= far) {
@@ -550,6 +549,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 						this.soundWaveEmitter.emitY =  1 * soundDirX;
 					}
 					//emit sound waves
+					game.world.bringToTop(this.soundWaveEmitter);
 					this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
 				}
 			}
@@ -571,36 +571,36 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 				//8 way directional movement
 				if (direction > 22.5 && direction < 67.5) {
 					//console.log("rightDown");
-					nearest.body.angle = nearest.body.angle - direction + 360;
+					nearest.body.angle = nearest.body.angle - direction - 90;
 				}
 				else if (direction >= 67.5 && direction <= 112.5) {
 					//console.log("down");
-					nearest.body.angle = nearest.body.angle - direction + 90;
+					nearest.body.angle = nearest.body.angle - direction + 360;
 				}
 				else if (direction > 112.5 && direction < 157.5) {
 					//console.log("leftDown");
-					nearest.body.angle = nearest.body.angle - direction + 180;
+					nearest.body.angle = nearest.body.angle - direction + 90;
 				}
 				else if (direction >= 157.5 && direction <= 202.5) {
 					//console.log("left");
-					nearest.body.angle = nearest.body.angle - direction - 90;
+					nearest.body.angle = nearest.body.angle - direction + 180;
 				}
 				else if (direction > 202.5 && direction < 247.5) {
 					//console.log("leftUp");
-					nearest.body.angle = nearest.body.angle - direction - 360
+					nearest.body.angle = nearest.body.angle - direction - 90;
 				}
 				else if (direction >= 247.5 && direction <= 292.5) {
 					//console.log("up");
-					nearest.body.angle = nearest.body.angle - direction + 90;
+					nearest.body.angle = nearest.body.angle - direction - 360;
 				}
 				else if (direction > 292.5 && direction < 337.5) {
 					//console.log("rightUp");
-					nearest.body.angle = nearest.body.angle - direction - 180
+					nearest.body.angle = nearest.body.angle - direction + 90;
 		  		}
 				else if (direction >= 337.5 && direction <= 360 ||
 						 direction >= 0     && direction <= 22.5) {
 					//console.log("right");
-					nearest.body.angle = nearest.body.angle - direction - 90;
+					nearest.body.angle = nearest.body.angle - direction - 180;
 				}
 				
 				//move towards player
@@ -610,10 +610,10 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 		}
 
 		//This will collect the baby if squid mommie is close by.
-		if (distance != undefined && distance <= touch && this.lullaby.isPlaying && nearest.body != null) {
+		// if (distance != undefined && distance <= touch && this.lullaby.isPlaying && nearest.body != null) {
 			
-			this.collectBaby(nearest);
-		}
+		// 	this.collectBaby(nearest);
+		// }
 		
 		//adding the feedback sound from the babys
 		if(this.lullaby.isPlaying && 
@@ -621,6 +621,11 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 		!this.cry.isPlaying) {
 			
 			this.cry.play();		
+		}
+
+		if (distance != undefined && distance <= touch && nearest.body != null) {
+			console.log("eaten");
+			this.collectBaby(nearest);
 		}
 	}
 }

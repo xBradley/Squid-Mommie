@@ -68,9 +68,11 @@ Level01.prototype = {
 		var followers = [];
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			var bb = this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie");
-			this.mommie.attachBaby(bb);
+			var bb = this.spawnFollower(this.xpos + (i*20), this.ypos + (i*20), "deadBabbie");
+			
 			followers.push(bb);
+			bb.setMommie(this.mommie);
+			console.log(bb.eaten);
 		}
 		this.mommie.setFollowers(followers);
 		
@@ -179,15 +181,15 @@ Level01.prototype = {
 	},
 	
 	//spawn baby, add to world, add to group
-	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5) {
-		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha);
+	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5, _eaten = false) {
+		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha, _eaten);
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
-	spawnFollower: function(_x, _y, _sprite, _size = 0.5, _alpha = 0.5) {
-		var babbie = new babySquid(game, _x, _y, _sprite, null, null, _size, _alpha);
+	spawnFollower: function(_x, _y, _sprite, _size = 0.5, _alpha = 0.5, _eaten = true) {
+		var babbie = new babySquid(game, _x, _y, _sprite, null, null, _size, _alpha, _eaten);
 		game.add.existing(babbie);
 		
 		return babbie;
