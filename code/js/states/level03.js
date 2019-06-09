@@ -22,7 +22,7 @@ Level03.prototype = {
 		console.log("Level 03");
 
 		//background
-		game.stage.backgroundColor = "#2F4F4F";		
+		game.stage.backgroundColor = "#1d232f";	
 		game.world.setBounds(0,0, 1600, 1600);
 		
 		//p2 physics
@@ -30,10 +30,15 @@ Level03.prototype = {
 		//added in the desperate attempt to make the map work
 	    game.physics.p2.setImpactEvents(true); 
 		game.physics.p2.gravity.y = 0;
+		game.physics.p2.TILE_BIAS = 500;
 
 		//This is for the origional map I made that will probably work for testing.
 		this.map = game.add.tilemap('world03');
 		this.map.addTilesetImage('slopes', 'slopes');
+		this.map.addTilesetImage('background', 'background');
+		this.map.addTilesetImage('rockWalls', 'rockWalls');
+		this.map.addTilesetImage('ground', 'ground');
+		this.groundLayer = this.map.createLayer('ground');
 		this.backgroundLayer = this.map.createLayer('background');
 		this.wallLayer = this.map.createLayer('walls');
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
@@ -47,13 +52,15 @@ Level03.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[3][0])
-			this.spawnBaby(800, 637, "deadBabbie", [3,0]);
+			this.spawnBaby(1600, 800, [3,0]);
+		// 	this.spawnBaby(800, 637, "deadBabbie", [3,0]);
 
-		if(squad[3][1])
-			this.spawnBaby(2200, 155, "deadBabbie", [3,1]);
+		// if(squad[3][1])
+		// 	this.spawnBaby(2200, 155, "deadBabbie", [3,1]);
 			
-		if(squad[3][2])
-			this.spawnBaby(3375, 270, "deadBabbie", [3,2]);
+		// if(squad[3][2])
+		// 	this.spawnBaby(3375, 270, "deadBabbie", [3,2]);
+		
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 3, this.LIGHT_RADIUS);
@@ -72,13 +79,14 @@ Level03.prototype = {
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
 	
-		//adding map forground above mommie
-		this.foreground = this.map.createLayer('foreground');
+		// //adding map forground above mommie (none)
+		// this.foreground = this.map.createLayer('foreground');
 
 		this.alive = [];
 		this.wiggle = false;
 		this.done = false;
 		this.wiggleTime = 0;
+	},
 	
 		// Create the shadow texture
 		this.shadowTexture = this.game.add.bitmapData(game.width + 600, game.height + 600);
@@ -109,14 +117,14 @@ Level03.prototype = {
 		if(this.mommie.body.y <= 60) {
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level01', true, false, 1535, 3085, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			// game.state.start('Level01', true, false, 1535, 3085, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			game.state.start('Level01', true, false, 2035, 6180, this.mommie.getCount(), this.theme, this.theme2);
 
 		
 			this.mommie.destroy();
 			this.babbies.destroy();
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
-			this.foreground.destroy();
 		}
 		//console.log(game.world.getTop());
 		if (game.world.getTop().key == "deadBabbie") {

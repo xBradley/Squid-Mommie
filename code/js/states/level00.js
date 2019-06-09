@@ -22,7 +22,7 @@ Level00.prototype = {
 		console.log("Level 00");
 
 		//background
-		game.stage.backgroundColor = "#2F4F4F";
+		game.stage.backgroundColor = "#1d232f";	
 		game.world.setBounds(0,0, 1600, 1600);
 		
 		//p2 physics
@@ -30,12 +30,16 @@ Level00.prototype = {
 		//added in the desperate attempt to make the map work
 	    game.physics.p2.setImpactEvents(true); 
 		game.physics.p2.gravity.y = 0;
+		game.physics.p2.TILE_BIAS = 500;
+
 
 		//This is for the original map I made that will probably work for testing.
 		this.map = game.add.tilemap('world00');
 		this.map.addTilesetImage('slopes', 'slopes');
+		this.map.addTilesetImage('ground', 'ground')
+		this.groundLayer = this.map.createLayer('ground');
 		this.backgroundLayer = this.map.createLayer('background');
-		this.wallLayer = this.map.createLayer('walls');
+		this.wallLayer = this.map.createLayer('Walls');
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
 		this.wallLayer.resizeWorld();
 
@@ -46,11 +50,21 @@ Level00.prototype = {
 
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
+		// if(squad[0][0])
+		// 	this.spawnBaby(496, 1230, "deadBabbie", [0,0]);
+		
+		// if(squad[0][1])
+		// 	this.spawnBaby(1755, 205, "deadBabbie", [0,1]);
 		if(squad[0][0])
-			this.spawnBaby(496, 1230, "deadBabbie", [0,0]);
+			this.spawnBaby(1552, 100, [0,0]);
 		
 		if(squad[0][1])
-			this.spawnBaby(1755, 205, "deadBabbie", [0,1]);
+			this.spawnBaby(1700, 2200, [0,1]);
+		if(squad[0][2])
+			this.spawnBaby(1345, 3010, [0,2]);
+		
+		if(squad[0][3])
+			this.spawnBaby(1600, 4800, [0,3]);
 
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 0, this.LIGHT_RADIUS);
@@ -274,16 +288,18 @@ Level00.prototype = {
 		//******************************************************//
 		
 		//Path to Level 01
-		if(this.mommie.body.x >= 1850){
+		if(this.mommie.body.x >= 1880){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			// game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
 			
 		
 			this.wallLayer.destroy();
+			this.groundLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
+			game.state.start('Level01', true, false, 160, 350, this.mommie.getCount(), this.theme, this.theme2);
 		}
 	},
 	

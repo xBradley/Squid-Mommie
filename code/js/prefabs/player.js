@@ -303,8 +303,8 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 			angle = Phaser.Math.normalizeAngle(angle);
 			
 			//move to mouse
-			this.body.velocity.x = Math.cos(angle) * 100;
-			this.body.velocity.y = Math.sin(angle) * 100;
+			this.body.velocity.x = Math.cos(angle) * 200;
+			this.body.velocity.y = Math.sin(angle) * 200;
 
 			//squid sound section
 			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {

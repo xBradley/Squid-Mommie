@@ -22,7 +22,7 @@ Level01.prototype = {
 		console.log("Level 01")
 
 		//background
-		game.stage.backgroundColor = "#2F4F4F";
+		game.stage.backgroundColor = "#1d232f";	
 		game.world.setBounds(0,0, 1600, 1600);
 		
 		//p2 physics
@@ -30,10 +30,14 @@ Level01.prototype = {
 		//added in the desperate attempt to make the map work
 	    game.physics.p2.setImpactEvents(true); 
 		game.physics.p2.gravity.y = 0;
+		game.physics.p2.TILE_BIAS = 500;
+
 
 		//This is for the origional map I made that will probably work for testing.
 		this.map = game.add.tilemap('world01');
 		this.map.addTilesetImage('slopes', 'slopes');
+		this.map.addTilesetImage('ground', 'ground');
+		this.grounLayer = this.map.createLayer('ground');
 		this.backgroundLayer = this.map.createLayer('background');
 		this.wallLayer = this.map.createLayer('walls');
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
@@ -47,19 +51,23 @@ Level01.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[1][0])
-			this.spawnBaby(520, 240, "deadBabbie", [1,0]);
-
+			this.spawnBaby(3680, 2560, [1,0]);
 		if(squad[1][1])
-			this.spawnBaby(1528, 1608, "deadBabbie", [1,1]);
+			this.spawnBaby(1000, 3000, [1,1]);
+		// 	this.spawnBaby(520, 240, "deadBabbie", [1,0]);
 
-		if(squad[1][2])	
-			this.spawnBaby(895, 2795, "deadBabbie", [1,2]);
+		// if(squad[1][1])
+		// 	this.spawnBaby(1528, 1608, "deadBabbie", [1,1]);
+
+		// if(squad[1][2])	
+		// 	this.spawnBaby(895, 2795, "deadBabbie", [1,2]);
 			
-		if(squad[1][3])	
-			this.spawnBaby(224, 690, "deadBabbie", [1,3]);
+		// if(squad[1][3])	
+		// 	this.spawnBaby(224, 690, "deadBabbie", [1,3]);
 
-		//I spawn the foreground here so that it covered up the babys
-		this.foreground = this.map.createLayer('foreground');
+		// //I spawn the foreground here so that it covered up the babys
+		// this.foreground = this.map.createLayer('foreground');
+		
 
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 1, this.LIGHT_RADIUS);
@@ -112,12 +120,12 @@ Level01.prototype = {
 		if(this.mommie.body.x <= 60){ 
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level00', true, false, 1820, 200, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			// game.state.start('Level00', true, false, 1820, 200, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			game.state.start('Level00', true, false, 1680, 5150, this.mommie.getCount(), this.theme, this.theme2);
 
 		
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
-			this.foreground.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
 		}
@@ -125,23 +133,24 @@ Level01.prototype = {
 		else if(this.mommie.body.y <= 60){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level02', true, false, 1120, 1805, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			// game.state.start('Level02', true, false, 1120, 1805, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			game.state.start('Level02', true, false, 576, 3040, this.mommie.getCount(), this.theme, this.theme2);
 
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
-			this.foreground.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
 		}
 		//moving to level 3
-		else if(this.mommie.body.y >= 3110){ 
+		else if(this.mommie.body.y >= 6370){ 
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level03', true, false, 320, 90, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			// game.state.start('Level03', true, false, 320, 90, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			game.state.start('Level03', true, false, 480, 96, this.mommie.getCount(), this.theme, this.theme2);
 
 			this.wallLayer.destroy();
+			this.grounLayer.destroy();
 			this.backgroundLayer.destroy();
-			this.foreground.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
 		}
@@ -150,7 +159,7 @@ Level01.prototype = {
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		//game.debug.pointer(game.input.activePointer);
+		game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
