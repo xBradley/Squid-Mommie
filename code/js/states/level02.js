@@ -54,6 +54,10 @@ Level02.prototype = {
 		this.babbies = game.add.group();
 		if(squad[2][0])
 			this.spawnBaby(1200, 740, [2,0]);
+		if(squad[2][1])
+			this.spawnBaby(1116, 654, [2,1]);
+		if(squad[2][2])
+			this.spawnBaby(594, 1153, [2,2]);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 2);
@@ -67,6 +71,8 @@ Level02.prototype = {
 		//adding map forground above mommie
 		this.foreground = this.map.createLayer('foreground');
 		this.foreground2 = this.map.createLayer('foreground2');
+		this.doorLayer = this.map.createLayer('door');
+
 
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
@@ -80,15 +86,16 @@ Level02.prototype = {
 			this.theme.volume -= .01;
 			this.theme2.volume += .01;
 		}
-		if(this.mommie.body.y >= 1860){
+		if(this.mommie.body.y >= 3165){
 			//console.log("Count: " + this.mommie.getCount());
 			
-			game.state.start('Level01', true, false, 1150, 90, this.mommie.getCount(), this.theme, this.theme2);
+			game.state.start('Level01', true, false, 6624, 128, this.mommie.getCount(), this.theme, this.theme2);
 
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.foreground.destroy();
 			this.foreground2.destroy();
+			this.doorLayer.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
 		}

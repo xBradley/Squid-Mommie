@@ -76,7 +76,7 @@ Boot.prototype = {
 		//game.load.tilemap('world00', 'section00.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('world01', 'level01.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('world02', 'level02.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.tilemap('world03', 'section03.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('world03', 'level03.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.spritesheet('slopes', 'slope1.png', 32, 32);
 		game.load.spritesheet('ground', 'ground.png', 32, 32);
 		game.load.spritesheet('door', 'door.png', 32, 32);

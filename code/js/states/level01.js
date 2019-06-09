@@ -51,6 +51,8 @@ Level01.prototype = {
 		this.babbies = game.add.group();
 		if(squad[1][0])
 			this.spawnBaby(3680, 2560, [1,0]);
+		if(squad[1][1])
+			this.spawnBaby(1000, 3000, [1,1]);
 
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 1);
@@ -100,7 +102,7 @@ Level01.prototype = {
 		else if(this.mommie.body.y >= 6370){ 
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level03', true, false, 320, 90, this.mommie.getCount(), this.theme, this.theme2);
+			game.state.start('Level03', true, false, 480, 96, this.mommie.getCount(), this.theme, this.theme2);
 
 			this.wallLayer.destroy();
 			this.grounLayer.destroy();

@@ -33,6 +33,10 @@ Level03.prototype = {
 		//This is for the origional map I made that will probably work for testing.
 		this.map = game.add.tilemap('world03');
 		this.map.addTilesetImage('slopes', 'slopes');
+		this.map.addTilesetImage('background', 'background');
+		this.map.addTilesetImage('rockWalls', 'rockWalls');
+		this.map.addTilesetImage('ground', 'ground');
+		this.groundLayer = this.map.createLayer('ground');
 		this.backgroundLayer = this.map.createLayer('background');
 		this.wallLayer = this.map.createLayer('walls');
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
@@ -46,13 +50,7 @@ Level03.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[3][0])
-			this.spawnBaby(800, 637, [3,0]);
-
-		if(squad[3][1])
-			this.spawnBaby(2200, 155, [3,1]);
-			
-		if(squad[3][2])
-			this.spawnBaby(3375, 270, [3,2]);
+			this.spawnBaby(1600, 800, [3,0]);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 3);
@@ -65,8 +63,6 @@ Level03.prototype = {
 
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
-		//adding map forground above mommie
-		this.foreground = this.map.createLayer('foreground');
 	},
 	
 	//Play update loop
@@ -86,7 +82,6 @@ Level03.prototype = {
 			this.babbies.destroy();
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
-			this.foreground.destroy();
 		}
 	},
 	
