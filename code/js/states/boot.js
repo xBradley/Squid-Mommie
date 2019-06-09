@@ -13,6 +13,7 @@ Boot.prototype = {
 	preload: function() {
 		game.load.path = "assets/img/";
 		game.load.image("white", "white.png"); 
+		game.load.image("black", "black.png"); 
 		game.load.image("soundWave", "soundwave.png");
 		game.load.image("radialWave", "radial.png");
 		game.load.image("aliveBabbie", "aliveBabbie.png");

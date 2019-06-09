@@ -22,6 +22,22 @@ function babySquid(_game, _x, _y, _key, _lvl, _id, _size, _alpha) {
 	this.body.mass = 2;
 
 
+	var bbLifespan = 2000;
+	var bbQuanity = 10;
+	var bbSizeX = 0.15;
+	var bbSizeY = 0.15;
+	var bbRate = 1;
+	this.bBubbleEmitter = game.add.emitter(-300,300);
+	this.bBubbleEmitter.makeParticles("radialWave", 0, bbQuanity);
+	this.bBubbleEmitter.gravity.y = -10;
+	this.bBubbleEmitter.setSize(bbSizeX, bbSizeY);
+	this.bBubbleEmitter.alpha = 1;
+
+	this.die = function() {
+		this.bBubbleEmitter.emitX = this.position.x;
+		this.bBubbleEmitter.emitY = this.position.y;
+		this.bBubbleEmitter.start(false, bbLifespan, bbRate, bbQuanity);
+	}
 	//Babbie id number
 	var levelNumber = _lvl;
 	var idNumber = _id;

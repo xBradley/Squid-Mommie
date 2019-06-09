@@ -6,7 +6,7 @@
 
 "use strict";
 //---------------------------------------------------------------------//
-function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
+function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
 
 	//Adding Audio Variables
@@ -118,7 +118,26 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 	//babbies eaten count
 	var babbieCount = _count;
 	var levelNumber = _lvl;
+	var lightRadius = _light;
 	var followers = [];
+	this.dying = false;
+
+
+	this.getFollowers = function() {
+		return followers;
+	}
+
+	this.setFollowers = function(bb) {
+		followers = bb; 
+	}
+
+	this.getLightRadius = function() {
+		return lightRadius;
+	}
+
+	this.incrementLight = function() {
+		lightRadius += 25;
+	}
 	
 	this.die = function() {
 		
@@ -133,13 +152,16 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 		game.add.tween(this.halo).to( {
 			alpha: 0, 
 		}, 2000, "Linear", true, 1000);
-
-
+		
 		for (var i = 0; i < followers.length; ++i) {
+			followers[i].die();
 			game.add.tween(followers[i]).to( {
 				alpha: 0, 
 			}, 2000, "Linear", true, 1000);
+			
 		}
+
+
 	}
 
 
@@ -233,10 +255,10 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 		_babbies.remove(babbie, false);
 		squad[babbie.getLevel()][babbie.getId()] = false;
 		
-		//console.log(squad);
 		game.add.existing(babbie);
 		this.attachBaby(babbie);
 		followers.push(babbie);
+		this.incrementLight();
 	}
 
 	//add constraints to mommie and babbies
@@ -424,6 +446,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 					this.soundWaveEmitter.emitY =  1 * soundDirX;
 				}
 				//emit sound waves
+				game.world.bringToTop(this.soundWaveEmitter);
 				this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
 			}
 			//if distance is between 200 and 400,
@@ -466,6 +489,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 					this.soundWaveEmitter.emitY =  1 * soundDirX;
 				}
 				//emit sound waves
+				game.world.bringToTop(this.soundWaveEmitter);
 				this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
 			}
 			//if distance is less than 200,
@@ -473,6 +497,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 			else if(distance <= near && nearest.body == null) {
 				//console.log("Near: " + distance);
 				if (babbieCount == 10) {
+					this.dying = true;
 					game.input.enabled = false;
 					var whiteOut = game.add.sprite(2420 - 900, 0, "white");
 					whiteOut.alpha = 0;
@@ -481,14 +506,13 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 
 					game.input.activePointer.resetButtons();
 				
-					game.add.tween(this.body).to( {angle: 270, x: 2400,y: 666}, 2000, "Linear", true, 1000);
+					game.add.tween(this.body).to( {angle: 270, x: 2360,y: 646}, 2000, "Linear", true, 1000);
 					
 					this.body.velocity.x = 0;
 					this.body.velocity.y = 0;
 					this.body.dynamic = false;
 
 					game.add.tween(whiteOut).from( { alpha: 1}, 4000, "Linear", true, 4000);
-			
 				}
 				else {
 					//find angle
@@ -611,6 +635,9 @@ player.prototype.update = function() {
 
 	//singing mechanic
 	this.sing();	
+
+	if (this.dying == true)
+		game.camera.focusOn(this);
 	
 }
 //---------------------------------------------------------------------//

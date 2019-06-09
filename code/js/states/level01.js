@@ -9,12 +9,13 @@
 var Level01 = function(game) {};
 Level01.prototype = {
 	//initialize variables for mommie
-	init: function(_xpos, _ypos, _count, _theme, _theme2){
+	init: function(_xpos, _ypos, _count, _theme, _theme2, _light){
 		this.xpos = _xpos;
 		this.ypos = _ypos;
 		this.count = _count;
 		this.theme = _theme;
 		this.theme2 = _theme2;
+		this.LIGHT_RADIUS = _light;
 	},
 
 	create: function() {
@@ -61,20 +62,43 @@ Level01.prototype = {
 		this.foreground = this.map.createLayer('foreground');
 
 		//add player character (mommie)
-		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 1);
+		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 1, this.LIGHT_RADIUS);
 		game.add.existing(this.mommie);
 
+		var followers = [];
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie"));
+			var bb = this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie");
+			this.mommie.attachBaby(bb);
+			followers.push(bb);
 		}
+		this.mommie.setFollowers(followers);
 		
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
+	
+		// Create the shadow texture
+		this.shadowTexture = this.game.add.bitmapData(game.width + 600, game.height + 600);
+		
+		// Create an object that will use the bitmap as a texture
+		this.lightSprite = this.game.add.image(0, 0, this.shadowTexture);
+
+		// Set the blend mode to MULTIPLY. This will darken the colors of
+    	// everything below this sprite.
+		this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+		this.lightSprite.anchor.setTo(0.5);
 	},
 	
 	//Play update loop
 	update: function() {
+		this.LIGHT_RADIUS = this.mommie.getLightRadius();
+		this.updateShadowTexture();
+
+		if (game.world.getTop().key == "deadBabbie") {
+			console.log(game.world.getTop());
+			game.world.bringToTop(this.lightSprite);
+		}
+
 
 		//switching theme the song for the final goodbye
 		if(this.mommie.getCount() == 10 && this.theme2.volume < 0.35){
@@ -86,8 +110,9 @@ Level01.prototype = {
 		if(this.mommie.body.x <= 60){ 
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level00', true, false, 1820, 200, this.mommie.getCount(), this.theme, this.theme2);
+			game.state.start('Level00', true, false, 1820, 200, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
 
+		
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.foreground.destroy();
@@ -98,7 +123,7 @@ Level01.prototype = {
 		else if(this.mommie.body.y <= 60){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level02', true, false, 1120, 1805, this.mommie.getCount(), this.theme, this.theme2);
+			game.state.start('Level02', true, false, 1120, 1805, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
 
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
@@ -110,7 +135,7 @@ Level01.prototype = {
 		else if(this.mommie.body.y >= 3110){ 
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level03', true, false, 320, 90, this.mommie.getCount(), this.theme, this.theme2);
+			game.state.start('Level03', true, false, 320, 90, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
 
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
@@ -128,6 +153,29 @@ Level01.prototype = {
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
 		//game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
+	},
+
+	updateShadowTexture: function() {	
+		// Draw shadow
+		this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+		this.shadowTexture.context.fillRect(0, 0, game.width + 600, game.height + 600);
+	
+		// Draw circle of light with a soft edge
+		var gradient = this.shadowTexture.context.createRadialGradient(
+			game.width, game.height, this.LIGHT_RADIUS * 0.75, game.width, game.height, this.LIGHT_RADIUS);
+		gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+		gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+
+		this.shadowTexture.context.beginPath();
+		this.shadowTexture.context.fillStyle = gradient;
+		this.shadowTexture.context.arc(game.width, game.height, this.LIGHT_RADIUS, 0, Math.PI*2);
+		this.shadowTexture.context.fill();
+	
+		// This just tells the engine it should update the texture cache
+		this.shadowTexture.dirty = true;
+	   
+		this.lightSprite.position.x = this.mommie.x;  
+		this.lightSprite.position.y = this.mommie.y;
 	},
 	
 	//spawn baby, add to world, add to group

@@ -9,12 +9,13 @@
 var Level00 = function(game) {};
 Level00.prototype = {
 	//initialize variables for mommie
-	init: function(_xpos, _ypos, _count, _theme, _theme2){
+	init: function(_xpos, _ypos, _count, _theme, _theme2, _light){
 		this.xpos = _xpos;
 		this.ypos = _ypos;
 		this.count = _count;
 		this.theme = _theme;
 		this.theme2 = _theme2;
+		this.LIGHT_RADIUS = _light;
 	},
 
 	create: function() {
@@ -52,19 +53,23 @@ Level00.prototype = {
 			this.spawnBaby(1755, 205, "deadBabbie", [0,1]);
 
 		//add player character (mommie)
-		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 0);
+		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 0, this.LIGHT_RADIUS);
 		game.add.existing(this.mommie);
 		
+		var followers = [];
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			this.mommie.attachBaby(this.spawnFollower(this.xpos - 50, this.ypos + 50, "deadBabbie"));
+			var bb = this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie");
+			this.mommie.attachBaby(bb);
+			followers.push(bb);
 		}
+		this.mommie.setFollowers(followers);
 		
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
 
 		//Move Tutorial Text
-		this.moveTutorial = game.add.text(this.mommie.position.x - 100, this.mommie.position.y - 100, "Hold Left Mouse to move me", {
+		this.moveTutorial = game.add.text(this.mommie.position.x - 80, this.mommie.position.y - 100, "Hold Left Mouse to move me", {
 			fontSize: "14px", 
 			fill: "#fff",
 			font: "Impact", 
@@ -73,6 +78,17 @@ Level00.prototype = {
 			}
 		);
 		this.moveTutorial.alpha = 0;
+
+		// Create the shadow texture
+		this.shadowTexture = this.game.add.bitmapData(game.width + 600, game.height + 600);
+		
+		// Create an object that will use the bitmap as a texture
+		this.lightSprite = this.game.add.image(0, 0, this.shadowTexture);
+
+		// Set the blend mode to MULTIPLY. This will darken the colors of
+    	// everything below this sprite.
+		this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+		this.lightSprite.anchor.setTo(0.5);
 
 		//Sing Tutorial Text
 		this.singTutorial = game.add.text(this.mommie.position.x - 125, this.mommie.position.y - 100, "Press Spacebar to Sing so I can find my babbies", {
@@ -99,6 +115,17 @@ Level00.prototype = {
 	
 	//Play update loop
 	update: function() {
+		this.LIGHT_RADIUS = this.mommie.getLightRadius();
+		this.updateShadowTexture();
+
+		if (game.world.getTop().key == "deadBabbie") {
+			console.log(game.world.getTop());
+			game.world.bringToTop(this.lightSprite);
+			game.world.bringToTop(this.moveTutorial);
+			game.world.bringToTop(this.singTutorial);
+			game.world.bringToTop(this.callTutorial);
+		}
+
 		//switching theme the song for the final goodbye
 		if(this.mommie.getCount() == 10 && this.theme2.volume < 0.35){
 			console.log(this.theme2.volume);
@@ -114,7 +141,7 @@ Level00.prototype = {
 			this.moveTutorial.alpha <= 0.9      && 
 			this.moveTutorial.position.x <= 420) {
 			
-				this.moveTutorial.position.x = this.mommie.position.x - 100;
+				this.moveTutorial.position.x = this.mommie.position.x - 80;
 				this.moveTutorial.position.y = this.mommie.position.y - 100;
 				this.moveTutorial.alpha += 0.01;
 			}
@@ -123,7 +150,7 @@ Level00.prototype = {
 			this.moveTutorial.alpha > 0.9            && 
 			this.moveTutorial.position.x <= 420) {
 			
-				this.moveTutorial.position.x = this.mommie.position.x - 100;
+				this.moveTutorial.position.x = this.mommie.position.x - 80;
 				this.moveTutorial.position.y = this.mommie.position.y - 100;
 			}
 			//After moving so far, fade out text
@@ -243,8 +270,9 @@ Level00.prototype = {
 		if(this.mommie.body.x >= 1850){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.theme, this.theme2);
- 
+			game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+			
+		
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.mommie.destroy();
@@ -260,6 +288,29 @@ Level00.prototype = {
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
 		//game.context.fillRect(zone.x, zone.y, zone.width, zone.height);
+	},
+
+	updateShadowTexture: function() {
+		// Draw shadow
+		this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+		this.shadowTexture.context.fillRect(0, 0, game.width + 600, game.height + 600);
+	
+		// Draw circle of light with a soft edge
+		var gradient = this.shadowTexture.context.createRadialGradient(
+			game.width, game.height, this.LIGHT_RADIUS * 0.75, game.width, game.height, this.LIGHT_RADIUS);
+		gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+		gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+
+		this.shadowTexture.context.beginPath();
+		this.shadowTexture.context.fillStyle = gradient;
+		this.shadowTexture.context.arc(game.width, game.height, this.LIGHT_RADIUS, 0, Math.PI*2);
+		this.shadowTexture.context.fill();
+	
+		// This just tells the engine it should update the texture cache
+		this.shadowTexture.dirty = true;
+	   
+		this.lightSprite.position.x = this.mommie.x;  
+		this.lightSprite.position.y = this.mommie.y;
 	},
 	
 	//spawn baby, add to world, add to group
