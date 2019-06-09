@@ -49,8 +49,8 @@ function babySquid(_game, _x, _y, _key, _lvl, _id, _size, _alpha, _eaten) {
 	// Define constants that affect motion
 	this.SPEED = 120; // missile speed pixels/second
 	this.TURN_RATE = 2; // turn rate in degrees/frame
-	this.WOBBLE_LIMIT = 15; // degrees
-	this.WOBBLE_SPEED = 60; // milliseconds
+	this.WOBBLE_LIMIT = 30; // degrees
+	this.WOBBLE_SPEED = 120; // milliseconds
 	this.wobble = this.WOBBLE_LIMIT;
 
 	this.eat = function() {

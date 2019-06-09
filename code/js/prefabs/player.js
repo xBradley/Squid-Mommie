@@ -255,7 +255,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 		game.add.existing(babbie);
 		babbie.setMommie(this);
 		babbie.eat();
-		//this.attachBaby(babbie);
+		
 		
 		this.incrementLight();
 	}
@@ -624,7 +624,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 		}
 
 		if (distance != undefined && distance <= touch && nearest.body != null) {
-			console.log("eaten");
+			//console.log("eaten");
 			this.collectBaby(nearest);
 		}
 	}

@@ -90,7 +90,10 @@ Level00.prototype = {
     	// everything below this sprite.
 		this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 		this.lightSprite.anchor.setTo(0.5);
+		
+		//this.mommie.filters=[ this.game.add.filter('Glow') ];
 
+		this.mommie.tint = 0xff0000;
 		//Sing Tutorial Text
 		this.singTutorial = game.add.text(this.mommie.position.x - 125, this.mommie.position.y - 100, "Press Spacebar to Sing so I can find my babbies", {
 			fontSize: "14px", 
@@ -116,6 +119,9 @@ Level00.prototype = {
 	
 	//Play update loop
 	update: function() {
+		
+		console.log(this.lightSprite);
+		console.log(this.mommie);
 		this.LIGHT_RADIUS = this.mommie.getLightRadius();
 		this.updateShadowTexture();
 
@@ -283,7 +289,7 @@ Level00.prototype = {
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
-		game.debug.spriteCoords(this.mommie, 32, 500);
+		//game.debug.spriteCoords(this.mommie, 32, 500);
 		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
@@ -330,4 +336,37 @@ Level00.prototype = {
 		return babbie;
 	},
 }
+
+Phaser.Filter.Glow = function (game) {
+    Phaser.Filter.call(this, game);
+
+    this.fragmentSrc = [
+        "precision lowp float;",
+        "varying vec2 vTextureCoord;",
+        "varying vec4 vColor = (1,0,0,1);",
+        'uniform sampler2D uSampler;',
+
+        'void main() {',
+            'vec4 sum = vec4(0);',
+            'vec2 texcoord = vTextureCoord;',
+            'for(int xx = -4; xx <= 4; xx++) {',
+                'for(int yy = -3; yy <= 3; yy++) {',
+                    'float dist = sqrt(float(xx*xx) + float(yy*yy));',
+                    'float factor = 0.0;',
+                    'if (dist == 0.0) {',
+                        'factor = 2.0;',
+                    '} else {',
+                        'factor = 2.0/abs(float(dist));',
+                    '}',
+                    'sum += texture2D(uSampler, texcoord + vec2(xx, yy) * 0.002) * factor;',
+                '}',
+            '}',
+            'gl_FragColor = sum * 0.025 + texture2D(uSampler, texcoord);',
+        '}'
+    ];
+};
+
+Phaser.Filter.Glow.prototype = Object.create(Phaser.Filter.prototype);
+Phaser.Filter.Glow.prototype.constructor = Phaser.Filter.Glow;
+
 //---------------------------------------------------------------------//
