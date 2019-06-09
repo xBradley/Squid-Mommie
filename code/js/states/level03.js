@@ -20,7 +20,7 @@ Level03.prototype = {
 		console.log("Level 03");
 
 		//background
-		game.stage.backgroundColor = "#2F4F4F";		
+		game.stage.backgroundColor = "#1d232f";	
 		game.world.setBounds(0,0, 1600, 1600);
 		
 		//p2 physics
@@ -28,6 +28,7 @@ Level03.prototype = {
 		//added in the desperate attempt to make the map work
 	    game.physics.p2.setImpactEvents(true); 
 		game.physics.p2.gravity.y = 0;
+		game.physics.p2.TILE_BIAS = 500;
 
 		//This is for the origional map I made that will probably work for testing.
 		this.map = game.add.tilemap('world03');
@@ -79,7 +80,7 @@ Level03.prototype = {
 		if(this.mommie.body.y <= 60){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level01', true, false, 1535, 3085, this.mommie.getCount(), this.theme, this.theme2);
+			game.state.start('Level01', true, false, 2035, 6180, this.mommie.getCount(), this.theme, this.theme2);
 
 			this.mommie.destroy();
 			this.babbies.destroy();

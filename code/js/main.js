@@ -59,4 +59,5 @@ window.onload = function() {
 	game.state.add("Gameover", Gameover);
 	game.state.start("Boot", true, true);
 }
+
 //---------------------------------------------------------------------//

@@ -22,10 +22,10 @@ Menu.prototype = {
 		this.theme.volume = 1;
 
 		game.stage.backgroundColor = "#dabbed";
-		game.add.text(115, 200, "Squid Mommie", {
+		game.add.text(115, 200, "Last Lullaby", {
 			          fontSize: "64px", 
 					  fill: "#fff",
-					  font: "Impact", 
+					  font: "titleFont", 
 					  stroke: "#000",
 					  strokeThickness: 8,
 					  }
@@ -75,8 +75,10 @@ Menu.prototype = {
 					  }
 		);
 
-		this.xpos = 380;
-		this.ypos = 280;
+	//	this.xpos = 416;
+	//	this.ypos = 384;
+	this.xpos = 550;
+	this.ypos = 384;
 		this.count = 0;
 	},
 	
@@ -84,7 +86,7 @@ Menu.prototype = {
 
 		//start game on spacebar
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			game.state.start("Level00", true, false, this.xpos, this.ypos, this.count, this.theme, this.theme2);
+			game.state.start("Level02", true, false, this.xpos, this.ypos, this.count, this.theme, this.theme2);
 	},
 }
 //---------------------------------------------------------------------//

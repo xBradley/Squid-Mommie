@@ -23,6 +23,10 @@ Boot.prototype = {
 		game.load.physics("squidPhysics", "squid.json");
 		game.load.atlas("MommieSheet", "SquidMomSheet.png", "SquidMomSheet.json");
 
+		//Loading fonts
+		game.load.path == "assets/fonts/";
+		game.load.script('titleFont', 'https://fonts.googleapis.com/css?family=Black+And+White+Picture&display=swap');
+
 		//loading sounds -Matt
 		game.load.path = "assets/audio/";
 		game.load.audio('theme', ['byeWater.ogg']);
@@ -68,11 +72,16 @@ Boot.prototype = {
 
 		//This is loading in the original map
 		game.load.path = 'assets/map/';
-		game.load.tilemap('world00', 'section00.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.tilemap('world01', 'section01.json', null, Phaser.Tilemap.TILED_JSON);
-		game.load.tilemap('world02', 'section02.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('world00', 'level00.json', null, Phaser.Tilemap.TILED_JSON);
+		//game.load.tilemap('world00', 'section00.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('world01', 'level01.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('world02', 'level02.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('world03', 'section03.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.spritesheet('slopes', 'slope1.png', 32, 32);
+		game.load.spritesheet('ground', 'ground.png', 32, 32);
+		game.load.spritesheet('door', 'door.png', 32, 32);
+		game.load.spritesheet('rockWall', 'rockWall.png', 32, 32);
+		game.load.spritesheet('background', 'background.png', 32, 32);
 		//end of map asset loading -Matt
 	},
 	

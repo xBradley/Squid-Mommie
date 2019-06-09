@@ -21,7 +21,7 @@ Level02.prototype = {
 		console.log("Level 02");
 
 		//background
-		game.stage.backgroundColor = "#2F4F4F";
+		game.stage.backgroundColor = "#1d232f";	
 		game.world.setBounds(0,0, 1600, 1600);
 		
 		//p2 physics
@@ -29,10 +29,17 @@ Level02.prototype = {
 		//added in the desperate attempt to make the map work
 	    game.physics.p2.setImpactEvents(true); 
 		game.physics.p2.gravity.y = 0;
+		game.physics.p2.TILE_BIAS = 500;
+
 
 		//This is for the origional map I made that will probably work for testing.
 		this.map = game.add.tilemap('world02');
 		this.map.addTilesetImage('slopes', 'slopes');
+		this.map.addTilesetImage('ground', 'ground');
+		this.map.addTilesetImage('door', 'door');
+		this.map.addTilesetImage('rockWall', 'rockWall');
+		this.map.addTilesetImage('background', 'background');
+		this.groundLayer = this.map.createLayer('ground');
 		this.backgroundLayer = this.map.createLayer('background');
 		this.wallLayer = this.map.createLayer('walls');
 		this.map.setCollisionByExclusion([], true, this.wallLayer);
@@ -46,7 +53,7 @@ Level02.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[2][0])
-			this.spawnBaby(975, 945, [2,0]);
+			this.spawnBaby(1200, 740, [2,0]);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 2);
