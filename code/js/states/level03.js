@@ -45,13 +45,13 @@ Level03.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[3][0])
-			this.spawnBaby(800, 637, [3,0]);
+			this.spawnBaby(800, 637, "deadBabbie", [3,0]);
 
 		if(squad[3][1])
-			this.spawnBaby(2200, 155, [3,1]);
+			this.spawnBaby(2200, 155, "deadBabbie", [3,1]);
 			
 		if(squad[3][2])
-			this.spawnBaby(3375, 270, [3,2]);
+			this.spawnBaby(3375, 270, "deadBabbie", [3,2]);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 3);
@@ -59,24 +59,49 @@ Level03.prototype = {
 
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50));
+			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie"));
 		}
 
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
+	
 		//adding map forground above mommie
 		this.foreground = this.map.createLayer('foreground');
-	},
+
+		this.alive = [];
+		this.wiggle = false;
+		this.done = false;
+		this.wiggleTime = 0;
+
+		// The radius of the circle of light
+		this.LIGHT_RADIUS = 150;
+
 	
+		// Create the shadow texture
+		this.shadowTexture = this.game.add.bitmapData(game.width + 600, game.height + 600);
+		
+		// Create an object that will use the bitmap as a texture
+		this.lightSprite = this.game.add.image(0, 0, this.shadowTexture);
+
+		// Set the blend mode to MULTIPLY. This will darken the colors of
+    	// everything below this sprite.
+		this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
+		this.lightSprite.anchor.setTo(0.5);
+	},
+
 	//Play update loop
 	update: function() {
+	
+		this.updateShadowTexture();
+		
+
 		//switching theme the song for the final goodbye
 		if(this.mommie.getCount() == 10 && this.theme2.volume < 0.35){
-			console.log(this.theme2.volume);
+			//console.log(this.theme2.volume);
 			this.theme.volume -= .01;
 			this.theme2.volume += .01;
 		}
-		if(this.mommie.body.y <= 60){
+		if(this.mommie.body.y <= 60) {
 			//console.log("Count: " + this.mommie.getCount());
 
 			game.state.start('Level01', true, false, 1535, 3085, this.mommie.getCount(), this.theme, this.theme2);
@@ -87,11 +112,196 @@ Level03.prototype = {
 			this.backgroundLayer.destroy();
 			this.foreground.destroy();
 		}
+		console.log(game.world.getTop());
+		if (game.world.getTop().key == "deadBabbie") {
+			console.log(game.world.getTop());
+			game.world.bringToTop(this.foreground);
+			game.world.bringToTop(this.lightSprite);
+		}
+
+		if (game.world.getTop().key == "white" && 
+		game.world.getTop().alpha == 1) {
+		
+			//middle
+			if (this.alive.length == 0) {
+				this.alive.push(this.spawnFollower(this.mommie.x - 50, this.mommie.y - 300, "aliveBabbie", 1, 0.8));
+				this.alive[0].body.angle = 90;
+
+				var tween = game.add.tween(this.alive[0].body).to( {
+					angle: 270, 
+					y: this.mommie.y - 200
+				}, 2000, "Linear", true, 6000);
+			}
+			
+			//top left
+			if (this.alive.length == 1) {
+				this.alive.push(this.spawnFollower(this.mommie.x - 300, this.mommie.y - 300, "aliveBabbie", 1, 0.8));
+				this.alive[1].body.angle = 45;
+
+				game.add.tween(this.alive[1].body).to( {
+					angle: 270, 
+					x: this.mommie.x - 200, 
+					y: this.mommie.y - 150, 
+				}, 2000, "Linear", true, 6000);
+			}
+			
+			//top right
+			if (this.alive.length == 2) {
+				this.alive.push(this.spawnFollower(this.mommie.x + 200, this.mommie.y - 300, "aliveBabbie", 1, 0.8));
+				this.alive[2].body.angle = 135;
+				
+				game.add.tween(this.alive[2].body).to( {
+					angle: 270, 
+					x: this.mommie.x + 100, 
+					y: this.mommie.y - 150, 
+				}, 2000, "Linear", true, 6000);
+			}
+
+			//bottom right
+			if (this.alive.length == 3) {
+				this.alive.push(this.spawnFollower(this.mommie.x + 200, this.mommie.y + 200, "aliveBabbie", 1, 0.8));
+				this.alive[3].body.angle = 225;
+				
+				game.add.tween(this.alive[3].body).to( {
+					angle: 270, 
+					x: this.mommie.x + 50, 
+					y: this.mommie.y + 100, 
+				}, 2000, "Linear", true, 6000);
+			}
+			
+			//bottom left
+			if (this.alive.length == 4) {
+				this.alive.push(this.spawnFollower(this.mommie.x - 300, this.mommie.y + 200, "aliveBabbie", 1, 0.8));
+				this.alive[4].body.angle = 315;
+				
+				game.add.tween(this.alive[4].body).to( {
+					angle: 270, 
+					x: this.mommie.x - 150, 
+					y: this.mommie.y + 100, 
+				}, 2000, "Linear", true, 6000);
+			}
+		}
+
+		if (this.alive.length == 5 && 
+		this.wiggle == false && this.done == false &&
+		this.alive[0].body.angle + 360 == 270 &&
+		this.alive[1].body.angle + 360 == 270 &&
+		this.alive[2].body.angle + 360 == 270 &&
+		this.alive[3].body.angle + 360 == 270 &&
+		this.alive[4].body.angle + 360 == 270) {
+			
+			this.wiggle = true;
+			this.done = true;
+			this.alive[0].body.rotateRight(25);
+			this.alive[1].body.rotateLeft(15);
+			this.alive[2].body.rotateRight(35);
+			this.alive[3].body.rotateLeft(10);
+			this.alive[4].body.rotateRight(20);
+		}
+
+		if (this.wiggle == true && this.wiggleTime != 181) {
+			if (this.alive[0].body.angle + 360 >= 280) {
+				this.alive[0].body.rotateLeft(25);
+			}
+			else if (this.alive[0].body.angle + 360 <= 260) {
+				this.alive[0].body.rotateRight(25);
+			}
+
+			if (this.alive[1].body.angle + 360 >= 280) {
+				this.alive[1].body.rotateLeft(25);
+			}
+			else if (this.alive[1].body.angle + 360 <= 260) {
+				this.alive[1].body.rotateRight(25);
+			}
+
+			if (this.alive[2].body.angle + 360 >= 280) {
+				this.alive[2].body.rotateLeft(25);
+			}
+			else if (this.alive[2].body.angle + 360 <= 260) {
+				this.alive[2].body.rotateRight(25);
+			}
+
+			if (this.alive[3].body.angle + 360 >= 280) {
+				this.alive[3].body.rotateLeft(25);
+			}
+			else if (this.alive[3].body.angle + 360 <= 260) {
+				this.alive[3].body.rotateRight(25);
+			}
+
+			if (this.alive[4].body.angle + 360 >= 280) {
+				this.alive[4].body.rotateLeft(25);
+			}
+			else if (this.alive[4].body.angle + 360 <= 260) {
+				this.alive[4].body.rotateRight(25);
+			}
+
+			
+			++this.wiggleTime;
+			console.log(this.wiggleTime);
+		}
+
+		if (this.wiggle == true && this.wiggleTime == 180) {
+
+			this.alive[0].body.angularVelocity = 0;
+			this.alive[0].body.angle = 270;
+	
+			this.alive[1].body.angularVelocity = 0;
+			this.alive[1].body.angle = 270;
+
+			this.alive[2].body.angularVelocity = 0;
+			this.alive[2].body.angle = 270;
+
+			this.alive[3].body.angularVelocity = 0;
+			this.alive[3].body.angle = 270;
+
+			this.alive[4].body.angularVelocity = 0;
+			this.alive[4].body.angle = 270;
+
+			if (this.alive[0].body.angle + 360 == 270 &&
+			this.alive[1].body.angle + 360 == 270 &&
+			this.alive[2].body.angle + 360 == 270 &&
+			this.alive[3].body.angle + 360 == 270 &&
+			this.alive[4].body.angle + 360 == 270) {
+				
+				this.wiggle = false;
+				this.mommie.die();
+			}
+		}
+	},
+
+	updateShadowTexture: function() {
+		// This function updates the shadow texture (this.shadowTexture).
+		// First, it fills the entire texture with a dark shadow color.
+		// Then it draws a white circle centered on the pointer position.
+		// Because the texture is drawn to the screen using the MULTIPLY
+		// blend mode, the dark areas of the texture make all of the colors
+		// underneath it darker, while the white area is unaffected.
+	
+		// Draw shadow
+		this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+		this.shadowTexture.context.fillRect(0, 0, game.width + 600, game.height + 600);
+	
+		// Draw circle of light with a soft edge
+		var gradient = this.shadowTexture.context.createRadialGradient(
+			game.width, game.height, this.LIGHT_RADIUS * 0.75, game.width, game.height, this.LIGHT_RADIUS);
+		gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+		gradient.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+
+		this.shadowTexture.context.beginPath();
+		this.shadowTexture.context.fillStyle = gradient;
+		this.shadowTexture.context.arc(game.width, game.height, this.LIGHT_RADIUS, 0, Math.PI*2);
+		this.shadowTexture.context.fill();
+	
+		// This just tells the engine it should update the texture cache
+		this.shadowTexture.dirty = true;
+	   
+		this.lightSprite.position.x = this.mommie.x;  
+		this.lightSprite.position.y = this.mommie.y;
 	},
 	
 	render: function() {
-		//game.debug.cameraInfo(game.camera, 32, 32);
-		//game.debug.spriteCoords(this.mommie, 32, 500);
+		game.debug.cameraInfo(game.camera, 32, 32);
+		game.debug.spriteCoords(this.mommie, 32, 500);
 		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
@@ -100,15 +310,15 @@ Level03.prototype = {
 	},
 	
 	//spawn baby, add to world, add to group
-	spawnBaby: function(_x, _y, _arr) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie",_arr[0],_arr[1]);
+	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha);
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
-	spawnFollower: function(_x, _y) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie", null, null);
+	spawnFollower: function(_x, _y, _sprite, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, null, null, _size, _alpha);
 		game.add.existing(babbie);
 		
 		return babbie;

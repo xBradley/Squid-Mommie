@@ -6,20 +6,20 @@
 
 "use strict";
 //---------------------------------------------------------------------//
-function babySquid(_game, _x, _y, _key, _lvl, _id) {
+function babySquid(_game, _x, _y, _key, _lvl, _id, _size, _alpha) {
 	Phaser.Sprite.call(this, _game, _x, _y, _key);
 	
 	//set size and anchor
 	this.anchor.setTo(0.5);
-	this.scale.setTo(0.5);
-	this.alpha = 0.5;
+	this.scale.setTo(_size);
+	this.alpha = _alpha;
 	
 	//p2 physics and collision stuff
 	game.physics.p2.enable(this, false);
 	this.body.collideWorldBounds = true;
 	this.body.clearShapes();
 	this.body.addRectangle(10, 30);
-	this.body.mass = 0.2;
+	this.body.mass = 2;
 
 
 	//Babbie id number

@@ -46,7 +46,7 @@ Level02.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[2][0])
-			this.spawnBaby(975, 945, [2,0]);
+			this.spawnBaby(975, 945, "deadBabbie", [2,0]);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 2);
@@ -54,15 +54,15 @@ Level02.prototype = {
 
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50));
+			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie"));
 		}
+
+		//camera stuff
+		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
 
 		//adding map forground above mommie
 		this.foreground = this.map.createLayer('foreground');
 		this.foreground2 = this.map.createLayer('foreground2');
-
-		//camera stuff
-		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
 	},
 	
 	//Play update loop
@@ -85,12 +85,17 @@ Level02.prototype = {
 			this.mommie.destroy();
 			this.babbies.destroy();
 		}
+		if (game.world.getTop().key == "deadBabbie") {
+			console.log(game.world.getTop());
+			game.world.bringToTop(this.foreground);
+			game.world.bringToTop(this.foreground2);
+		}
 	},
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
@@ -98,18 +103,18 @@ Level02.prototype = {
 	},
 	
 	//spawn baby, add to world, add to group
-	spawnBaby: function(_x, _y, _arr) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie",_arr[0],_arr[1]);
+	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha);
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
-	spawnFollower: function(_x, _y) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie", null, null);
+	spawnFollower: function(_x, _y, _sprite, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, null, null, _size, _alpha);
 		game.add.existing(babbie);
-	
+		
 		return babbie;
-	},
+	},	
 }
 //---------------------------------------------------------------------//

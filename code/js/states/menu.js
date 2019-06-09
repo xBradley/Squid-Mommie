@@ -75,16 +75,18 @@ Menu.prototype = {
 					  }
 		);
 
+		// this.xpos = 2420;
+		// this.ypos = 666;
 		this.xpos = 380;
 		this.ypos = 280;
-		this.count = 0;
+		this.count = 9;
 	},
 	
 	update: function() {
 
 		//start game on spacebar
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
-			game.state.start("Level00", true, false, this.xpos, this.ypos, this.count, this.theme, this.theme2);
+			game.state.start("Level03", true, false, this.xpos, this.ypos, this.count, this.theme, this.theme2);
 	},
 }
 //---------------------------------------------------------------------//

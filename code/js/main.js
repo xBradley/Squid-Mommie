@@ -17,10 +17,10 @@ var config = {
 var game = new Phaser.Game(config);
 
 //Global 2D array to manage baby squid spawning
-var level00Babbies = [true, true];
-var level01Babbies = [true, true, true, true];
-var level02Babbies = [true];
-var level03Babbies = [true, true, true];
+var level00Babbies = [false, false];
+var level01Babbies = [false, false, false, false];
+var level02Babbies = [false];
+var level03Babbies = [true, false, false];
 var squad = [level00Babbies, level01Babbies, level02Babbies, level03Babbies];
 
 //Global tutorial checker

@@ -46,16 +46,16 @@ Level01.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[1][0])
-			this.spawnBaby(520, 240, [1,0]);
+			this.spawnBaby(520, 240, "deadBabbie", [1,0]);
 
 		if(squad[1][1])
-			this.spawnBaby(1528, 1608, [1,1]);
+			this.spawnBaby(1528, 1608, "deadBabbie", [1,1]);
 
 		if(squad[1][2])	
-			this.spawnBaby(895, 2795, [1,2]);
+			this.spawnBaby(895, 2795, "deadBabbie", [1,2]);
 			
 		if(squad[1][3])	
-			this.spawnBaby(224, 690, [1,3]);
+			this.spawnBaby(224, 690, "deadBabbie", [1,3]);
 
 		//I spawn the foreground here so that it covered up the babys
 		this.foreground = this.map.createLayer('foreground');
@@ -66,7 +66,7 @@ Level01.prototype = {
 
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50));
+			this.mommie.attachBaby(this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie"));
 		}
 		
 		//camera stuff
@@ -131,15 +131,15 @@ Level01.prototype = {
 	},
 	
 	//spawn baby, add to world, add to group
-	spawnBaby: function(_x, _y, _arr) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie",_arr[0],_arr[1]);
+	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha);
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
-	spawnFollower: function(_x, _y) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie", null, null);
+	spawnFollower: function(_x, _y, _sprite, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, null, null, _size, _alpha);
 		game.add.existing(babbie);
 		
 		return babbie;

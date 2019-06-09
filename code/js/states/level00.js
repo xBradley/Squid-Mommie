@@ -46,10 +46,10 @@ Level00.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[0][0])
-			this.spawnBaby(496, 1230, [0,0]);
+			this.spawnBaby(496, 1230, "deadBabbie", [0,0]);
 		
 		if(squad[0][1])
-			this.spawnBaby(1755, 205, [0,1]);
+			this.spawnBaby(1755, 205, "deadBabbie", [0,1]);
 
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 0);
@@ -57,14 +57,14 @@ Level00.prototype = {
 		
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			this.mommie.attachBaby(this.spawnFollower(this.xpos - 50, this.ypos + 50));
+			this.mommie.attachBaby(this.spawnFollower(this.xpos - 50, this.ypos + 50, "deadBabbie"));
 		}
 		
 		//camera stuff
 		game.camera.follow(this.mommie, Phaser.Camera.FOLLOW_TOPDOWN);
 
 		//Move Tutorial Text
-		this.moveTutorial = game.add.text(this.mommie.position.x - 100, this.mommie.position.y - 100, "Click or Hold Left Mouse to move me", {
+		this.moveTutorial = game.add.text(this.mommie.position.x - 100, this.mommie.position.y - 100, "Hold Left Mouse to move me", {
 			fontSize: "14px", 
 			fill: "#fff",
 			font: "Impact", 
@@ -263,15 +263,15 @@ Level00.prototype = {
 	},
 	
 	//spawn baby, add to world, add to group
-	spawnBaby: function(_x, _y, _arr) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie",_arr[0],_arr[1]);
+	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha);
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},
 
 	//spawn baby, add to world, return baby
-	spawnFollower: function(_x, _y) {
-		var babbie = new babySquid(game, _x, _y, "deadBabbie", null, null);
+	spawnFollower: function(_x, _y, _sprite, _size = 0.5, _alpha = 0.5) {
+		var babbie = new babySquid(game, _x, _y, _sprite, null, null, _size, _alpha);
 		game.add.existing(babbie);
 		
 		return babbie;

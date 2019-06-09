@@ -102,11 +102,47 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 	this.radialWaveEmitter.setScale(rMinSize, rMaxSize, 
 		                            rMinSize, rMaxSize, rLifespan);
 	this.radialWaveEmitter.setAlpha(1, 0, rLifespan);
+
+
+	var bLifespan = 3000;
+	var bQuanity = 100;
+	var bSizeX = 0.5;
+	var bSizeY = 0.5;
+	var bRate = 25;
+	this.bubbleEmitter = game.add.emitter(-300,300);
+	this.bubbleEmitter.makeParticles("radialWave", 0, bQuanity);
+	this.bubbleEmitter.gravity.y = -10;
+	this.bubbleEmitter.setSize(bSizeX, bSizeY);
+	this.bubbleEmitter.alpha = 1;
 	
 	//babbies eaten count
 	var babbieCount = _count;
 	var levelNumber = _lvl;
+	var followers = [];
 	
+	this.die = function() {
+		
+		this.bubbleEmitter.emitX = this.position.x;
+		this.bubbleEmitter.emitY = this.position.y;
+		this.bubbleEmitter.start(false, bLifespan, bRate, bQuanity);
+
+		game.add.tween(this).to( {
+			alpha: 0, 
+		}, 2000, "Linear", true, 1000);
+
+		game.add.tween(this.halo).to( {
+			alpha: 0, 
+		}, 2000, "Linear", true, 1000);
+
+
+		for (var i = 0; i < followers.length; ++i) {
+			game.add.tween(followers[i]).to( {
+				alpha: 0, 
+			}, 2000, "Linear", true, 1000);
+		}
+	}
+
+
 	//function to count eaten babbies
 	this.incrementCount = function() {
 		++babbieCount;
@@ -182,8 +218,8 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 				if (possibleLevels.length > 0)
 					nearestArea.position = guide[3][1];
 				else {
-					nearestArea.position.x = 1420;
-					nearestArea.position.y = 420;
+					nearestArea.position.x = 2420;
+					nearestArea.position.y = 666;
 				}
 			}
 			return nearestArea;
@@ -197,15 +233,16 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 		_babbies.remove(babbie, false);
 		squad[babbie.getLevel()][babbie.getId()] = false;
 		
-		console.log(squad);
+		//console.log(squad);
 		game.add.existing(babbie);
 		this.attachBaby(babbie);
+		followers.push(babbie);
 	}
 
 	//add constraints to mommie and babbies
 	this.attachBaby = function(babbie) {
 		
-		game.physics.p2.createDistanceConstraint(this, babbie, 80, [0,0], [0,0],150);
+		game.physics.p2.createDistanceConstraint(this, babbie, 80, [0,0], [0,0],666);
 		game.physics.p2.createGearConstraint(this, babbie, 1, 1);
 	}
 
@@ -245,8 +282,8 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 			angle = Phaser.Math.normalizeAngle(angle);
 			
 			//move to mouse
-			this.body.velocity.x = Math.cos(angle) * 500;
-			this.body.velocity.y = Math.sin(angle) * 500;
+			this.body.velocity.x = Math.cos(angle) * 100;
+			this.body.velocity.y = Math.sin(angle) * 100;
 
 			//squid sound section
 			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {
@@ -288,9 +325,6 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 		
 		//Spacebar controls
 		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
-			//if the player collects all the babies they do their final sing
-			if (babbieCount == 10)
-				game.state.start("Gameover", true, false);
 
 			//lullaby
 			if(!this.lullaby.isPlaying)
@@ -300,10 +334,11 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 			this.radialWaveEmitter.emitX = this.position.x;
 			this.radialWaveEmitter.emitY = this.position.y;
 			this.radialWaveEmitter.start(false, rLifespan, rRate, rQuanity);
+			game.world.bringToTop(this.soundWaveEmitter);
 			
 			var angle;
-			var far = 400;
-			var near = 200;
+			var far = 450;
+			var near = 250;
 			var touch = 150;
 			//if distance is greater than 400,
 			//find angle between player to nearest and make far soundwave
@@ -437,43 +472,62 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 			//find angle between player to nearest and make near soundwave
 			else if(distance <= near && nearest.body == null) {
 				//console.log("Near: " + distance);
+				if (babbieCount == 10) {
+					game.input.enabled = false;
+					var whiteOut = game.add.sprite(2420 - 900, 0, "white");
+					whiteOut.alpha = 0;
 
-				//find angle
-				angle = Phaser.Math.angleBetweenPoints(this.position, 									  nearest.position);
+					game.add.tween(whiteOut).to( { alpha: 1}, 1000, "Linear", true);
+
+					game.input.activePointer.resetButtons();
 				
-				//convert to degrees and range to [0-360]
-				angle = Phaser.Math.radToDeg(Phaser.Math.reverseAngle(angle));
+					game.add.tween(this.body).to( {angle: 270, x: 2400,y: 666}, 2000, "Linear", true, 1000);
+					
+					this.body.velocity.x = 0;
+					this.body.velocity.y = 0;
+					this.body.dynamic = false;
+
+					game.add.tween(whiteOut).from( { alpha: 1}, 4000, "Linear", true, 4000);
+			
+				}
+				else {
+					//find angle
+					angle = Phaser.Math.angleBetweenPoints(this.position, 									  nearest.position);
 				
-				//set sound directions to mommie's position
-				var soundDirX = nearest.position.x;
-				var soundDirY = nearest.position.y;
-				if (angle > 225 && angle < 315) {
-					//set soundwave position and angle
-					this.soundWaveEmitter.angle = 0;
-					this.soundWaveEmitter.emitX = 1 * soundDirX;
-					this.soundWaveEmitter.emitY = 1 * soundDirY;
+					//convert to degrees and range to [0-360]
+					angle = Phaser.Math.radToDeg(Phaser.Math.reverseAngle(angle));
+				
+					//set sound directions to mommie's position
+					var soundDirX = nearest.position.x;
+					var soundDirY = nearest.position.y;
+					if (angle > 225 && angle < 315) {
+						//set soundwave position and angle
+						this.soundWaveEmitter.angle = 0;
+						this.soundWaveEmitter.emitX = 1 * soundDirX;
+						this.soundWaveEmitter.emitY = 1 * soundDirY;
+					}
+					else if (angle >= 315 && angle <= 360 || 
+					     	angle >= 0   && angle <= 45) {
+						//set soundwave position and angle
+						this.soundWaveEmitter.angle = 90;
+						this.soundWaveEmitter.emitX =  1 * soundDirY;
+						this.soundWaveEmitter.emitY = -1 * soundDirX;
+					}
+					else if (angle > 45 && angle < 135) {
+						//set soundwave position and angle
+						this.soundWaveEmitter.angle = 180;
+						this.soundWaveEmitter.emitX = -1 * soundDirX;
+						this.soundWaveEmitter.emitY = -1 * soundDirY;
+					}
+					else if (angle >= 135 && angle <= 225) {
+						//set soundwave position and angle
+						this.soundWaveEmitter.angle = 270;
+						this.soundWaveEmitter.emitX = -1 * soundDirY;
+						this.soundWaveEmitter.emitY =  1 * soundDirX;
+					}
+					//emit sound waves
+					this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
 				}
-				else if (angle >= 315 && angle <= 360 || 
-					     angle >= 0   && angle <= 45) {
-					//set soundwave position and angle
-					this.soundWaveEmitter.angle = 90;
-					this.soundWaveEmitter.emitX =  1 * soundDirY;
-					this.soundWaveEmitter.emitY = -1 * soundDirX;
-				}
-				else if (angle > 45 && angle < 135) {
-					//set soundwave position and angle
-					this.soundWaveEmitter.angle = 180;
-					this.soundWaveEmitter.emitX = -1 * soundDirX;
-					this.soundWaveEmitter.emitY = -1 * soundDirY;
-				}
-				else if (angle >= 135 && angle <= 225) {
-					//set soundwave position and angle
-					this.soundWaveEmitter.angle = 270;
-					this.soundWaveEmitter.emitX = -1 * soundDirY;
-					this.soundWaveEmitter.emitY =  1 * soundDirX;
-				}
-				//emit sound waves
-				this.soundWaveEmitter.start(false, sLifespan, sRate, sQuanity);
 			}
 			//if distance is less than 200,
 			//find angle between nearest to players, rotate, move babby
@@ -526,8 +580,8 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 				}
 				
 				//move towards player
-				nearest.body.force.x = Math.cos(angle) * 1500;
-				nearest.body.force.y = Math.sin(angle) * 1500;
+				nearest.body.velocity.x = Math.cos(angle) * 200;
+				nearest.body.velocity.y = Math.sin(angle) * 200;
 			}
 		}
 
@@ -539,8 +593,8 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl) {
 		
 		//adding the feedback sound from the babys
 		if(this.lullaby.isPlaying && 
-			this.lullaby.currentTime >= (this.lullaby.durationMS - 50) && 
-			!this.cry.isPlaying) {
+		this.lullaby.currentTime >= (this.lullaby.durationMS - 50) && 
+		!this.cry.isPlaying) {
 			
 			this.cry.play();		
 		}
@@ -557,5 +611,6 @@ player.prototype.update = function() {
 
 	//singing mechanic
 	this.sing();	
+	
 }
 //---------------------------------------------------------------------//
