@@ -91,7 +91,7 @@ Level01.prototype = {
 		else if(this.mommie.body.y <= 60){
 			//console.log("Count: " + this.mommie.getCount());
 
-			game.state.start('Level02', true, false, 1120, 1805, this.mommie.getCount(), this.theme, this.theme2);
+			game.state.start('Level02', true, false, 576, 3040, this.mommie.getCount(), this.theme, this.theme2);
 
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
