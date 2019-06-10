@@ -63,6 +63,9 @@ Level00.prototype = {
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 0);
 		game.add.existing(this.mommie);
+
+		//adding in the forground over any possible sprites
+		this.forground = this.map.createLayer('forground');
 		
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
