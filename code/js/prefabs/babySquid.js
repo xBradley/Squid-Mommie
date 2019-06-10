@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Beta												   //
+//Squid Mommie - Final												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		babySquid.js												   //
 //---------------------------------------------------------------------//

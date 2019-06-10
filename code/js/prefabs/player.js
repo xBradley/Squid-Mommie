@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Beta												   //
+//Squid Mommie - Final												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		player.js													   //
 //---------------------------------------------------------------------//
@@ -114,6 +114,9 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 	this.bubbleEmitter.gravity.y = -10;
 	this.bubbleEmitter.setSize(bSizeX, bSizeY);
 	this.bubbleEmitter.alpha = 1;
+	this.glow = game.add.sprite(this.position.x, this.position.y, "glow");
+	this.glow.alpha = 0.3;
+	this.glow.scale.x = 0.7;
 	
 	//babbies eaten count
 	var babbieCount = _count;
@@ -138,7 +141,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 	this.incrementLight = function() {
 		lightRadius += 25;
 	}
-	
+
 	this.die = function() {
 		
 		this.bubbleEmitter.emitX = this.position.x;
@@ -150,6 +153,10 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 		}, 1500, "Linear", true, 4000);
 
 		game.add.tween(this.halo).to( {
+			alpha: 0, 
+		}, 1500, "Linear", true, 4000);
+
+		game.add.tween(this.glow).to( {
 			alpha: 0, 
 		}, 1500, "Linear", true, 4000);
 		
@@ -288,6 +295,8 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 	
 			//rotate to mouse direction
 			this.body.rotateLeft(50 * deltaMouseRad);
+
+			//this.glow.angle = this.body.angle;
 			
 			//set world position values
 			var mouseWorldPosX = game.input.activePointer.position.x + game.camera.position.x;
@@ -316,13 +325,19 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 			this.swish = false //resetting the variable after the mouse is released
 			
 			//reset angle to up
-			if (Math.floor(this.body.angle + 360) > 275)
+			if (Math.floor(this.body.angle + 360) > 275) {
 				this.body.angle -= 0.5;
-			else if (Math.floor(this.body.angle + 360) < 265)
+				//this.glow.angle -= 0.5;
+			}
+			else if (Math.floor(this.body.angle + 360) < 265) {
 				this.body.angle += 0.5;
+				//this.glow.angle += 0.5;
+			}
 			else if (Math.floor(this.body.angle + 360) >= 265 && 
-					 Math.floor(this.body.angle + 360) <= 275)
+					 Math.floor(this.body.angle + 360) <= 275) {
 				this.body.angle = 270;
+				//this.glow.angle = 270;
+			}
 		}
 	}
 
@@ -495,7 +510,7 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 				if (babbieCount == 10) {
 					this.dying = true;
 					game.input.enabled = false;
-					var whiteOut = game.add.sprite(3333 - 900, 3333 - 900, "white");
+					var whiteOut = game.add.sprite(3333 - 900, 3333 - 600, "white");
 					whiteOut.alpha = 0;
 
 					game.add.tween(whiteOut).to( { alpha: 1}, 1000, "Linear", true);
@@ -640,6 +655,9 @@ player.prototype.update = function() {
 
 	if (this.dying == true)
 		game.camera.focusOn(this);
+
+	this.glow.position.x = this.position.x - 60;
+	this.glow.position.y = this.position.y - 70;
 	
 }
 //---------------------------------------------------------------------//

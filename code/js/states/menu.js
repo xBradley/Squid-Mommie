@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Beta												   //
+//Squid Mommie - Final												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		menu.js													       //
 //---------------------------------------------------------------------//
@@ -11,7 +11,7 @@ Menu.prototype = {
 	
 	//Menu screen  
 	create: function() {
-		console.log("Menu");
+		//console.log("Menu");
 
 		//playing main theme
 		this.theme = game.add.audio('theme');
@@ -20,73 +20,43 @@ Menu.prototype = {
 		this.theme2.loopFull();
 		this.theme2.volume = 0;
 		this.theme.volume = 1;
+		
+		game.stage.backgroundColor = "#0";
+		this.ts = game.add.sprite(0,0, "title");
+		
+		this.text = game.add.text(170, 500, "Press Space", {
+			fontSize: "64px", 
+			fill: "#fff",
+			font: "Black And White Picture", 
+			stroke: "#000",
+			strokeThickness: 7,
+		});
+		
+		this.flash = game.add.tween(this.text).to( { 
+			alpha: 0
+		}, 1000, Phaser.Easing.Sinusoidal.InOut, true, 0, Number.POSITIVE_INFINITY, true );
 
-		game.stage.backgroundColor = "#dabbed";
-		game.add.text(115, 200, "Last Lullaby", {
-			          fontSize: "64px", 
-					  fill: "#fff",
-					  font: "titleFont", 
-					  stroke: "#000",
-					  strokeThickness: 8,
-					  }
-		);
-		
-		game.add.text(220, 280, "Space to Sing", {
-			          fontSize: "32px", 
-					  fill: "#fff",
-					  font: "Impact", 
-					  stroke: "#000",
-					  strokeThickness: 6,
-					  }
-		);
-		game.add.text(210, 320, "Mouse to move", {
-			          fontSize: "32px", 
-					  fill: "#fff",
-					  font: "Impact", 
-					  stroke: "#000",
-					  strokeThickness: 6,
-					  }
-		);
-		
-		game.add.text(170, 500, "Sing to Continue", {
-			          fontSize: "42px", 
-					  fill: "#fff",
-					  font: "Impact", 
-					  stroke: "#000",
-					  strokeThickness: 7,
-					  }
-		);
-		
-		game.add.text(170, 20, "Goal: Find all your babbies", {
-			          fontSize: "24px", 
-					  fill: "#fff",
-					  font: "Impact", 
-					  stroke: "#000",
-					  strokeThickness: 4,
-					  }
-		);
-		
-		game.add.text(205, 50, "Hint: Sing when done", {
-			          fontSize: "24px", 
-					  fill: "#fff",
-					  font: "Impact", 
-					  stroke: "#000",
-					  strokeThickness: 4,
-					  }
-		);
-
-	
-		
 		this.xpos = 416;
 		this.ypos = 384;
-		this.count = 0;
+		this.count = 00;
 		this.lightRadius = 150;
 	},
 	
 	update: function() {
 
 		//start game on spacebar
-		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR))
+		if (game.input.keyboard.justPressed(Phaser.Keyboard.SPACEBAR)) {
+			this.flash.stop();
+			game.add.tween(this.ts).to( {
+				alpha: 0, 
+			}, 2000, "Linear", true);
+			
+			game.add.tween(this.text).to( {
+				alpha: 0, 
+			}, 2000, "Linear", true);
+		}
+		
+		if (this.text.alpha < 0.1 && this.ts.alpha < 0.1)
 			game.state.start("Level00", true, false, this.xpos, this.ypos, this.count, this.theme, this.theme2, this.lightRadius);
 	},
 }

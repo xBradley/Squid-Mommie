@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Beta												   //
+//Squid Mommie - Final												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		boot.js														   //
 //---------------------------------------------------------------------//
@@ -14,6 +14,8 @@ Boot.prototype = {
 		game.load.path = "assets/img/";
 		game.load.image("white", "white.png"); 
 		game.load.image("black", "black.png"); 
+		game.load.image("glow", "glowyOval.png");
+		game.load.image("title", "title.png");
 		game.load.image("soundWave", "soundwave.png");
 		game.load.image("radialWave", "radial.png");
 		game.load.image("aliveBabbie", "aliveBabbie.png");
@@ -21,10 +23,6 @@ Boot.prototype = {
 		game.load.image("mommieHalo", "halo.png");
 		game.load.physics("squidPhysics", "squid.json");
 		game.load.atlas("MommieSheet", "SquidMomSheet.png", "SquidMomSheet.json");
-
-		// //Loading fonts
-		// game.load.path = "assets/fonts/";
-		// game.load.script('titleFont', 'https://fonts.googleapis.com/css?family=Black+And+White+Picture&display=swap');
 
 		//loading sounds -Matt
 		game.load.path = "assets/audio/";
@@ -59,20 +57,10 @@ Boot.prototype = {
 		game.load.audio('cry09', ['baby09.ogg']);
 		game.load.audio('cry10', ['baby10.ogg']);
 
-		//end sound loading
-
-		//Adding map assets. Lemme know if you are curious about any of these parts -Matt
-		//This is the map in progress
-		/*
-		game.load.path = 'assets/map/'; //I have this specific folder for map things
-		game.load.tilemap('world', 'depths.json', null, Phaser.Tilemap.TILED_JSON); 
-		game.load.spritesheet('caveTiles', 'underwaterCave.png', 16, 16);
-		*/
 
 		//This is loading in the original map
 		game.load.path = 'assets/map/';
 		game.load.tilemap('world00', 'level00.json', null, Phaser.Tilemap.TILED_JSON);
-		//game.load.tilemap('world00', 'section00.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('world01', 'level01.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('world02', 'level02.json', null, Phaser.Tilemap.TILED_JSON);
 		game.load.tilemap('world03', 'level03.json', null, Phaser.Tilemap.TILED_JSON);
@@ -86,7 +74,7 @@ Boot.prototype = {
 	
 	//Boot-up screen
 	create: function() {
-		console.log("Boot");
+		//console.log("Boot");
 		
 		game.stage.backgroundColor = "#deface";
 		game.state.start("Menu", true, false);

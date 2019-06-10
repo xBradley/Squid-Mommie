@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------//
-//Squid Mommie - Beta												   //
+//Squid Mommie - Final												   //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		level03.js													   //
 //---------------------------------------------------------------------//
@@ -19,7 +19,7 @@ Level03.prototype = {
 	},
 
 	create: function() {
-		console.log("Level 03");
+		//console.log("Level 03");
 
 		//background
 		game.stage.backgroundColor = "#1d232f";	
@@ -106,7 +106,7 @@ Level03.prototype = {
 		}
 		//console.log(game.world.getTop());
 		if (game.world.getTop().key == "deadBabbie") {
-			console.log(game.world.getTop());
+		//	console.log(game.world.getTop());
 			game.world.bringToTop(this.lightSprite);
 		}
 	},
