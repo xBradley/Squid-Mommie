@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------//
+ //---------------------------------------------------------------------//
 //Squid Mommie - Beta					   						       //
 //		Squid Mommies - Bradley Gallardo, Cathy Tram, Matthew Reed     //
 //		main.js														   //
@@ -21,6 +21,10 @@ var level00Babbies = [true, true, true, true];
 var level01Babbies = [true, true];
 var level02Babbies = [true, true, true];
 var level03Babbies = [true];
+// var level00Babbies = [false, false, false, false];
+// var level01Babbies = [false, false];
+// var level02Babbies = [false, false, false];
+// var level03Babbies = [false];
 var squad = [level00Babbies, level01Babbies, level02Babbies, level03Babbies];
 
 //Global tutorial checker
@@ -33,7 +37,7 @@ var level01Guide = {
 	2: new Phaser.Point(6624,5), 
 	3: new Phaser.Point(1984,6368),
 };
-var level02Guide = { 1: new Phaser.Point(1130,1895) };
+var level02Guide = { 1: new Phaser.Point(582,3150) };
 var level03Guide = { 1: new Phaser.Point(480,5) };
 var guide = [level00Guide, level01Guide, level02Guide, level03Guide];
 

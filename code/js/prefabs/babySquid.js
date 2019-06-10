@@ -47,10 +47,10 @@ function babySquid(_game, _x, _y, _key, _lvl, _id, _size, _alpha, _eaten) {
 	this.once = false;
 
 	// Define constants that affect motion
-	this.SPEED = 120; // missile speed pixels/second
+	this.SPEED = 170; // missile speed pixels/second
 	this.TURN_RATE = 2; // turn rate in degrees/frame
 	this.WOBBLE_LIMIT = 30; // degrees
-	this.WOBBLE_SPEED = 120; // milliseconds
+	this.WOBBLE_SPEED = 500; // milliseconds
 	this.wobble = this.WOBBLE_LIMIT;
 
 	this.eat = function() {
@@ -72,11 +72,13 @@ function babySquid(_game, _x, _y, _key, _lvl, _id, _size, _alpha, _eaten) {
 	}
 
 	this.followMommie = function() {
+		var target = new Phaser.Point(3333, 3333); 
+		if (this.mommie != null) {
+			target.x = this.mommie.position.x;
+			target.y = this.mommie.position.y;
+		}
 
-		var targetAngle = game.math.angleBetween(
-			this.position.x, this.position.y,
-			this.mommie.position.x, this.mommie.position.y
-		);
+		var targetAngle = game.math.angleBetween( this.position.x, this.position.y, target.x, target.y);
 
 		targetAngle += this.game.math.degToRad(this.wobble);
 

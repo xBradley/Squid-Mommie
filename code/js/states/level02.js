@@ -54,13 +54,11 @@ Level02.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[2][0])
-			this.spawnBaby(1200, 740, [2,0]);
+			this.spawnBaby(1200, 740, "deadBabbie", [2,0]);
 		if(squad[2][1])
-			this.spawnBaby(1116, 654, [2,1]);
+			this.spawnBaby(1116, 654, "deadBabbie", [2,1]);
 		if(squad[2][2])
-			this.spawnBaby(594, 1153, [2,2]);
-
-		// this.spawnBaby(975, 945, "deadBabbie", [2,0]);
+			this.spawnBaby(594, 1153, "deadBabbie", [2,2]);
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 2, this.LIGHT_RADIUS);
@@ -69,7 +67,7 @@ Level02.prototype = {
 		var followers = [];
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			var bb = this.spawnFollower(this.xpos + 50, this.ypos + 50, "deadBabbie");
+			var bb = this.spawnFollower(this.xpos + game.rnd.integerInRange(10, 50) * i, this.ypos + game.rnd.integerInRange(10, 50) * i, "deadBabbie");
 			
 			followers.push(bb);
 			bb.setMommie(this.mommie);
@@ -89,8 +87,6 @@ Level02.prototype = {
 		
 		// Create an object that will use the bitmap as a texture
 		this.lightSprite = this.game.add.image(0, 0, this.shadowTexture);
-		
-
 
 		// Set the blend mode to MULTIPLY. This will darken the colors of
     	// everything below this sprite.
@@ -107,9 +103,9 @@ Level02.prototype = {
 			console.log(game.world.getTop());
 			game.world.bringToTop(this.foreground);
 			game.world.bringToTop(this.foreground2);
+			game.world.bringToTop(this.doorLayer);
 			game.world.bringToTop(this.lightSprite);
 		}
-
 
 		//switching theme the song for the final goodbye
 		if(this.mommie.getCount() == 10 && this.theme2.volume < 0.35){
@@ -117,12 +113,7 @@ Level02.prototype = {
 			this.theme.volume -= .01;
 			this.theme2.volume += .01;
 		}
-		if(this.mommie.body.y >= 3165){
-			//console.log("Count: " + this.mommie.getCount());
-			
-			// game.state.start('Level01', true, false, 1150, 90, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
-			game.state.start('Level01', true, false, 6624, 128, this.mommie.getCount(), this.theme, this.theme2);
-
+		if(this.mommie.body.y >= 3110){
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.foreground.destroy();
@@ -130,11 +121,8 @@ Level02.prototype = {
 			this.doorLayer.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
-		}
-		if (game.world.getTop().key == "deadBabbie") {
-			console.log(game.world.getTop());
-			game.world.bringToTop(this.foreground);
-			game.world.bringToTop(this.foreground2);
+
+			game.state.start('Level01', true, false, 6624, 140 , this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
 		}
 	},
 	
@@ -150,7 +138,7 @@ Level02.prototype = {
 
 	updateShadowTexture: function() {	
 		// Draw shadow
-		this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+		this.shadowTexture.context.fillStyle = 'rgb(25, 25, 25)';
 		this.shadowTexture.context.fillRect(0, 0, game.width + 600, game.height + 600);
 	
 		// Draw circle of light with a soft edge
@@ -174,6 +162,7 @@ Level02.prototype = {
 	//spawn baby, add to world, add to group
 	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5, _eaten = false) {
 		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha, _eaten);
+		babbie.body.angle = 270;
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},

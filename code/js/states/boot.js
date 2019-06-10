@@ -22,9 +22,9 @@ Boot.prototype = {
 		game.load.physics("squidPhysics", "squid.json");
 		game.load.atlas("MommieSheet", "SquidMomSheet.png", "SquidMomSheet.json");
 
-		//Loading fonts
-		game.load.path == "assets/fonts/";
-		game.load.script('titleFont', 'https://fonts.googleapis.com/css?family=Black+And+White+Picture&display=swap');
+		// //Loading fonts
+		// game.load.path = "assets/fonts/";
+		// game.load.script('titleFont', 'https://fonts.googleapis.com/css?family=Black+And+White+Picture&display=swap');
 
 		//loading sounds -Matt
 		game.load.path = "assets/audio/";

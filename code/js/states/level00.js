@@ -50,21 +50,14 @@ Level00.prototype = {
 
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
-		// if(squad[0][0])
-		// 	this.spawnBaby(496, 1230, "deadBabbie", [0,0]);
-		
-		// if(squad[0][1])
-		// 	this.spawnBaby(1755, 205, "deadBabbie", [0,1]);
 		if(squad[0][0])
-			this.spawnBaby(1552, 100, [0,0]);
-		
+			this.spawnBaby(1552, 100, "deadBabbie", [0,0]);
 		if(squad[0][1])
-			this.spawnBaby(1700, 2200, [0,1]);
+			this.spawnBaby(1700, 2200, "deadBabbie", [0,1]);
 		if(squad[0][2])
-			this.spawnBaby(1345, 3010, [0,2]);
-		
+			this.spawnBaby(1345, 3010, "deadBabbie", [0,2]);
 		if(squad[0][3])
-			this.spawnBaby(1600, 4800, [0,3]);
+			this.spawnBaby(1600, 4800, "deadBabbie", [0,3]);
 
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 0, this.LIGHT_RADIUS);
@@ -73,7 +66,8 @@ Level00.prototype = {
 		var followers = [];
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			var bb = this.spawnFollower(this.xpos + (i*20), this.ypos + (i*20), "deadBabbie");
+			
+			var bb = this.spawnFollower(this.xpos + game.rnd.integerInRange(10, 50) * i, this.ypos + game.rnd.integerInRange(10, 50) * i, "deadBabbie");
 			
 			followers.push(bb);
 			bb.setMommie(this.mommie);
@@ -104,10 +98,7 @@ Level00.prototype = {
     	// everything below this sprite.
 		this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 		this.lightSprite.anchor.setTo(0.5);
-		
-		//this.mommie.filters=[ this.game.add.filter('Glow') ];
 
-		this.mommie.tint = 0xff0000;
 		//Sing Tutorial Text
 		this.singTutorial = game.add.text(this.mommie.position.x - 125, this.mommie.position.y - 100, "Press Spacebar to Sing so I can find my babbies", {
 			fontSize: "14px", 
@@ -133,9 +124,6 @@ Level00.prototype = {
 	
 	//Play update loop
 	update: function() {
-		
-		console.log(this.lightSprite);
-		console.log(this.mommie);
 		this.LIGHT_RADIUS = this.mommie.getLightRadius();
 		this.updateShadowTexture();
 
@@ -288,18 +276,14 @@ Level00.prototype = {
 		//******************************************************//
 		
 		//Path to Level 01
-		if(this.mommie.body.x >= 1880){
-			//console.log("Count: " + this.mommie.getCount());
-
-			// game.state.start('Level01', true, false, 90, 205, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
-			
-		
+		if(this.mommie.body.x >= 1845){		
 			this.wallLayer.destroy();
 			this.groundLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
-			game.state.start('Level01', true, false, 160, 350, this.mommie.getCount(), this.theme, this.theme2);
+
+			game.state.start('Level01', true, false, 160, 350, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
 		}
 	},
 	
@@ -315,7 +299,7 @@ Level00.prototype = {
 
 	updateShadowTexture: function() {
 		// Draw shadow
-		this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+		this.shadowTexture.context.fillStyle = 'rgb(25, 25, 25)';
 		this.shadowTexture.context.fillRect(0, 0, game.width + 600, game.height + 600);
 	
 		// Draw circle of light with a soft edge
@@ -352,37 +336,4 @@ Level00.prototype = {
 		return babbie;
 	},
 }
-
-Phaser.Filter.Glow = function (game) {
-    Phaser.Filter.call(this, game);
-
-    this.fragmentSrc = [
-        "precision lowp float;",
-        "varying vec2 vTextureCoord;",
-        "varying vec4 vColor = (1,0,0,1);",
-        'uniform sampler2D uSampler;',
-
-        'void main() {',
-            'vec4 sum = vec4(0);',
-            'vec2 texcoord = vTextureCoord;',
-            'for(int xx = -4; xx <= 4; xx++) {',
-                'for(int yy = -3; yy <= 3; yy++) {',
-                    'float dist = sqrt(float(xx*xx) + float(yy*yy));',
-                    'float factor = 0.0;',
-                    'if (dist == 0.0) {',
-                        'factor = 2.0;',
-                    '} else {',
-                        'factor = 2.0/abs(float(dist));',
-                    '}',
-                    'sum += texture2D(uSampler, texcoord + vec2(xx, yy) * 0.002) * factor;',
-                '}',
-            '}',
-            'gl_FragColor = sum * 0.025 + texture2D(uSampler, texcoord);',
-        '}'
-    ];
-};
-
-Phaser.Filter.Glow.prototype = Object.create(Phaser.Filter.prototype);
-Phaser.Filter.Glow.prototype.constructor = Phaser.Filter.Glow;
-
 //---------------------------------------------------------------------//

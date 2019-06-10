@@ -51,24 +51,10 @@ Level01.prototype = {
 		//spawn babbie and add to group (babbies) 
 		this.babbies = game.add.group();
 		if(squad[1][0])
-			this.spawnBaby(3680, 2560, [1,0]);
+			this.spawnBaby(3680, 2560, "deadBabbie", [1,0]);
 		if(squad[1][1])
-			this.spawnBaby(1000, 3000, [1,1]);
-		// 	this.spawnBaby(520, 240, "deadBabbie", [1,0]);
-
-		// if(squad[1][1])
-		// 	this.spawnBaby(1528, 1608, "deadBabbie", [1,1]);
-
-		// if(squad[1][2])	
-		// 	this.spawnBaby(895, 2795, "deadBabbie", [1,2]);
-			
-		// if(squad[1][3])	
-		// 	this.spawnBaby(224, 690, "deadBabbie", [1,3]);
-
-		// //I spawn the foreground here so that it covered up the babys
-		// this.foreground = this.map.createLayer('foreground');
+			this.spawnBaby(1000, 3000, "deadBabbie", [1,1]);
 		
-
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 1, this.LIGHT_RADIUS);
 		game.add.existing(this.mommie);
@@ -76,7 +62,7 @@ Level01.prototype = {
 		var followers = [];
 		//add babbie followers
 		for (var i = 0; i < this.count; i++) {
-			var bb = this.spawnFollower(this.xpos + (i*20), this.ypos + (i*20), "deadBabbie");
+			var bb = this.spawnFollower(this.xpos + game.rnd.integerInRange(10, 50) * i, this.ypos + game.rnd.integerInRange(10, 50) * i, "deadBabbie");
 			
 			followers.push(bb);
 			bb.setMommie(this.mommie);
@@ -97,6 +83,13 @@ Level01.prototype = {
     	// everything below this sprite.
 		this.lightSprite.blendMode = Phaser.blendModes.MULTIPLY;
 		this.lightSprite.anchor.setTo(0.5);
+
+		this.alive = [];
+		this.wiggle = false;
+		this.done = false;
+		this.wiggleTime = 0;
+		this.blackOut = game.add.sprite(3333 - 750, 3333 - 750, "black");
+		this.blackOut.alpha = 0;
 	},
 	
 	//Play update loop
@@ -118,48 +111,212 @@ Level01.prototype = {
 		}
 		//Moving back to level 0
 		if(this.mommie.body.x <= 60){ 
-			//console.log("Count: " + this.mommie.getCount());
-
-			// game.state.start('Level00', true, false, 1820, 200, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
-			game.state.start('Level00', true, false, 1680, 5150, this.mommie.getCount(), this.theme, this.theme2);
-
-		
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
+
+			game.state.start('Level00', true, false, 1680, 5150, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
 		}
 		//Moving to level 2
-		else if(this.mommie.body.y <= 60){
-			//console.log("Count: " + this.mommie.getCount());
-
-			// game.state.start('Level02', true, false, 1120, 1805, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
-			game.state.start('Level02', true, false, 576, 3040, this.mommie.getCount(), this.theme, this.theme2);
-
+		else if(this.mommie.body.y <= 120 ){
 			this.wallLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
-		}
+
+			game.state.start('Level02', true, false, 576, 3020, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+		} 
 		//moving to level 3
-		else if(this.mommie.body.y >= 6370){ 
-			//console.log("Count: " + this.mommie.getCount());
-
-			// game.state.start('Level03', true, false, 320, 90, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
-			game.state.start('Level03', true, false, 480, 96, this.mommie.getCount(), this.theme, this.theme2);
-
+		else if(this.mommie.body.y >= 6300){ 
 			this.wallLayer.destroy();
 			this.grounLayer.destroy();
 			this.backgroundLayer.destroy();
 			this.mommie.destroy();
 			this.babbies.destroy();
+
+			game.state.start('Level03', true, false, 480, 130, this.mommie.getCount(), this.theme, this.theme2, this.mommie.getLightRadius());
+		}
+
+		if (game.world.getTop().key == "white" && 
+		game.world.getTop().alpha == 1) {
+			
+			//middle
+			if (this.alive.length == 0) {
+				this.alive.push(this.spawnFollower(3333, 3333 - 400, "aliveBabbie", 1, 0, false));
+				this.alive[0].body.angle = 90;
+			
+
+				game.add.tween(this.alive[0].body).to( {
+					angle: 270, 
+					y: 3333 - 200
+				}, 2000, "Linear", true, 6000);
+
+				game.add.tween(this.alive[0]).to( { alpha: 0.8 }, 1000, "Linear", true, 7000);
+			}
+			
+			//top left
+			if (this.alive.length == 1) {
+				this.alive.push(this.spawnFollower(3333 - 400, 3333 - 350, "aliveBabbie", 1, 0, false));
+				this.alive[1].body.angle = 45;
+
+				game.add.tween(this.alive[1].body).to( {
+					angle: 270, 
+					x: 3333 - 150, 
+					y: 3333 - 150, 
+				}, 3000, "Linear", true, 6000);
+  
+				game.add.tween(this.alive[1]).to( { alpha: 0.8 }, 1000, "Linear", true, 7000);
+			}
+			
+			//top right
+			if (this.alive.length == 2) {
+				this.alive.push(this.spawnFollower(3333 + 300, 3333 - 400, "aliveBabbie", 1, 0, false));
+				this.alive[2].body.angle = 135;
+				
+				game.add.tween(this.alive[2].body).to( {
+					angle: 270, 
+					x: 3333 + 150, 
+					y: 3333 - 150, 
+				}, 3000, "Linear", true, 6000);
+
+				game.add.tween(this.alive[2]).to( { alpha: 0.8 }, 1000, "Linear", true, 7000);
+			}
+
+			//bottom right
+			if (this.alive.length == 3) {
+				this.alive.push(this.spawnFollower(3333 + 300, 3333 + 450, "aliveBabbie", 1, 0, false));
+				this.alive[3].body.angle = 225;
+				
+				game.add.tween(this.alive[3].body).to( {
+					angle: 270, 
+					x: 3333 + 100, 
+					y: 3333 + 100, 
+				}, 3000, "Linear", true, 6000);
+
+				game.add.tween(this.alive[3]).to( { alpha: 0.8 }, 1000, "Linear", true, 7000);
+			}
+			
+			//bottom left
+			if (this.alive.length == 4) {
+				this.alive.push(this.spawnFollower(3333 - 400, 3333 +  300, "aliveBabbie", 1, 0, false));
+				this.alive[4].body.angle = 315;
+				
+				game.add.tween(this.alive[4].body).to( {
+					angle: 270, 
+					x: 3333 - 100, 
+					y: 3333 + 100, 
+				}, 3000, "Linear", true, 6000);
+
+				game.add.tween(this.alive[4]).to( { alpha: 0.8 }, 1000, "Linear", true, 7000);
+			}
+			
+		}
+
+		if (this.alive.length == 5 && 
+		this.wiggle == false && this.done == false &&
+		this.alive[0].body.angle + 360 == 270 &&
+		this.alive[1].body.angle + 360 == 270 &&
+		this.alive[2].body.angle + 360 == 270 &&
+		this.alive[3].body.angle + 360 == 270 &&
+		this.alive[4].body.angle + 360 == 270) {
+	
+			
+			this.wiggle = true;
+			this.done = true;
+			this.alive[0].body.rotateRight(25);
+			this.alive[1].body.rotateLeft(15);
+			this.alive[2].body.rotateRight(35);
+			this.alive[3].body.rotateLeft(10);
+			this.alive[4].body.rotateRight(20);
+		}
+
+		if (this.wiggle == true && this.wiggleTime != 181) {
+			if (this.alive[0].body.angle + 360 >= 280) {
+				this.alive[0].body.rotateLeft(25);
+			}
+			else if (this.alive[0].body.angle + 360 <= 260) {
+				this.alive[0].body.rotateRight(25);
+			}
+
+			if (this.alive[1].body.angle + 360 >= 280) {
+				this.alive[1].body.rotateLeft(25);
+			}
+			else if (this.alive[1].body.angle + 360 <= 260) {
+				this.alive[1].body.rotateRight(25);
+			}
+
+			if (this.alive[2].body.angle + 360 >= 280) {
+				this.alive[2].body.rotateLeft(25);
+			}
+			else if (this.alive[2].body.angle + 360 <= 260) {
+				this.alive[2].body.rotateRight(25);
+			}
+
+			if (this.alive[3].body.angle + 360 >= 280) {
+				this.alive[3].body.rotateLeft(25);
+			}
+			else if (this.alive[3].body.angle + 360 <= 260) {
+				this.alive[3].body.rotateRight(25);
+			}
+
+			if (this.alive[4].body.angle + 360 >= 280) {
+				this.alive[4].body.rotateLeft(25);
+			}
+			else if (this.alive[4].body.angle + 360 <= 260) {
+				this.alive[4].body.rotateRight(25);
+			}
+			++this.wiggleTime;
+		}
+
+		if (this.wiggle == true && this.wiggleTime == 180) {
+
+			this.alive[0].body.angularVelocity = 0;
+			this.alive[0].body.angle = 270;
+	
+			this.alive[1].body.angularVelocity = 0;
+			this.alive[1].body.angle = 270;
+
+			this.alive[2].body.angularVelocity = 0;
+			this.alive[2].body.angle = 270;
+
+			this.alive[3].body.angularVelocity = 0;
+			this.alive[3].body.angle = 270;
+
+			this.alive[4].body.angularVelocity = 0;
+			this.alive[4].body.angle = 270;
+
+			if (this.alive[0].body.angle + 360 == 270 &&
+			this.alive[1].body.angle + 360 == 270 &&
+			this.alive[2].body.angle + 360 == 270 &&
+			this.alive[3].body.angle + 360 == 270 &&
+			this.alive[4].body.angle + 360 == 270) {
+				
+
+				for (let i = 0; i < this.alive.length; ++i) {
+					this.alive[i].eat();
+				}
+
+				this.wiggle = false;
+				this.mommie.die();
+			}
+		}
+		
+		if (this.mommie.alpha < 0.2) {
+			game.world.bringToTop(this.blackOut);
+			game.add.tween(this.blackOut).to( { alpha: 1}, 1000, "Linear", true);
+		}
+
+		if (this.blackOut.alpha >= 0.95) {
+			game.input.enabled = true;
+			game.state.start('Gameover', true, true);
 		}
 	},
 	
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
@@ -168,7 +325,7 @@ Level01.prototype = {
 
 	updateShadowTexture: function() {	
 		// Draw shadow
-		this.shadowTexture.context.fillStyle = 'rgb(50, 50, 50)';
+		this.shadowTexture.context.fillStyle = 'rgb(25, 25, 25)';
 		this.shadowTexture.context.fillRect(0, 0, game.width + 600, game.height + 600);
 	
 		// Draw circle of light with a soft edge
@@ -192,6 +349,7 @@ Level01.prototype = {
 	//spawn baby, add to world, add to group
 	spawnBaby: function(_x, _y, _sprite, _arr, _size = 0.5, _alpha = 0.5, _eaten = false) {
 		var babbie = new babySquid(game, _x, _y, _sprite, _arr[0], _arr[1], _size, _alpha, _eaten);
+		babbie.body.angle = 270;
 		game.add.existing(babbie);
 		this.babbies.add(babbie);
 	},

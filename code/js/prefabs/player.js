@@ -147,17 +147,17 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 
 		game.add.tween(this).to( {
 			alpha: 0, 
-		}, 2000, "Linear", true, 1000);
+		}, 1500, "Linear", true, 4000);
 
 		game.add.tween(this.halo).to( {
 			alpha: 0, 
-		}, 2000, "Linear", true, 1000);
+		}, 1500, "Linear", true, 4000);
 		
 		for (var i = 0; i < followers.length; ++i) {
 			followers[i].die();
 			game.add.tween(followers[i]).to( {
 				alpha: 0, 
-			}, 2000, "Linear", true, 1000);
+			}, 1500, "Linear", true, 4000);
 		}
 	}
 
@@ -227,19 +227,16 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 						}
 					}
 				}
-				else
-					nearestArea.position = guide[1][3];
+				else {
+					nearestArea.position.x = 3333;
+					nearestArea.position.y = 3333;
+				}
 			}
 			else if (this.getLevel() == 2) {
 				nearestArea.position = guide[2][1];
 			}
 			else if (this.getLevel() == 3) {
-				if (possibleLevels.length > 0)
-					nearestArea.position = guide[3][1];
-				else {
-					nearestArea.position.x = 2420;
-					nearestArea.position.y = 666;
-				}
+				nearestArea.position = guide[3][1];
 			}
 			return nearestArea;
 		}
@@ -303,8 +300,8 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 			angle = Phaser.Math.normalizeAngle(angle);
 			
 			//move to mouse
-			this.body.velocity.x = Math.cos(angle) * 200;
-			this.body.velocity.y = Math.sin(angle) * 200;
+			this.body.velocity.x = Math.cos(angle) * 150;
+			this.body.velocity.y = Math.sin(angle) * 150;
 
 			//squid sound section
 			if (game.input.activePointer.leftButton.justPressed && !this.swish && !this.swim.isPlaying) {
@@ -498,14 +495,14 @@ function player(_game, _x, _y, _key, _babbies, _count, _lvl, _light) {
 				if (babbieCount == 10) {
 					this.dying = true;
 					game.input.enabled = false;
-					var whiteOut = game.add.sprite(2420 - 900, 0, "white");
+					var whiteOut = game.add.sprite(3333 - 900, 3333 - 900, "white");
 					whiteOut.alpha = 0;
 
 					game.add.tween(whiteOut).to( { alpha: 1}, 1000, "Linear", true);
 
 					game.input.activePointer.resetButtons();
 				
-					game.add.tween(this.body).to( {angle: 270, x: 2360,y: 646}, 2000, "Linear", true, 1000);
+					game.add.tween(this.body).to( {angle: 270, x: 3333,y: 3333}, 2000, "Linear", true, 1000);
 					
 					this.body.velocity.x = 0;
 					this.body.velocity.y = 0;

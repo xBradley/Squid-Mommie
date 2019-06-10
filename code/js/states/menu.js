@@ -75,10 +75,8 @@ Menu.prototype = {
 					  }
 		);
 
-		// // this.xpos = 2420;
-		// // this.ypos = 666;
-		// this.xpos = 380;
-		// this.ypos = 280;
+	
+		
 		this.xpos = 416;
 		this.ypos = 384;
 		this.count = 0;
