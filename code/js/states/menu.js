@@ -38,7 +38,7 @@ Menu.prototype = {
 
 		this.xpos = 416;
 		this.ypos = 384;
-		this.count = 00;
+		this.count = 0;
 		this.lightRadius = 150;
 	},
 	
