@@ -51,6 +51,9 @@ Level03.prototype = {
 		this.babbies = game.add.group();
 		if(squad[3][0])
 			this.spawnBaby(1600, 800, [3,0]);
+
+		//adding in the forground over any possible sprites
+		this.forground = this.map.createLayer('forground');
 		
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 3);

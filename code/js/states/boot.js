@@ -12,6 +12,7 @@ Boot.prototype = {
 	//Load all assets
 	preload: function() {
 		game.load.path = "assets/img/";
+		game.load.image('startScreen', 'startScreen.png');
 		game.load.image("bg", "waterBackground.jpg"); 
 		game.load.image("squid", "squid.png");
 		game.load.image("arrow", "arrow.png");

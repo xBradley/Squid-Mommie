@@ -20,7 +20,10 @@ Menu.prototype = {
 		this.theme2.loopFull();
 		this.theme2.volume = 0;
 		this.theme.volume = 1;
+		this.startScreen = game.add.sprite(-20,-35,'startScreen');
+		this.startScreen.scale.setTo(0.25);
 
+		/*
 		game.stage.backgroundColor = "#dabbed";
 		game.add.text(115, 200, "Last Lullaby", {
 			          fontSize: "64px", 
@@ -74,6 +77,7 @@ Menu.prototype = {
 					  strokeThickness: 4,
 					  }
 		);
+		*/
 
 	this.xpos = 416;
 	this.ypos = 384;

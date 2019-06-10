@@ -54,6 +54,9 @@ Level01.prototype = {
 		if(squad[1][1])
 			this.spawnBaby(1000, 3000, [1,1]);
 
+		//adding in the forground over any possible sprites
+		this.forground = this.map.createLayer('forground');
+
 		//add player character (mommie)
 		this.mommie = new player(game, this.xpos, this.ypos, "MommieSheet", this.babbies, this.count, 1);
 		game.add.existing(this.mommie);
@@ -99,7 +102,7 @@ Level01.prototype = {
 			this.babbies.destroy();
 		}
 		//moving to level 3
-		else if(this.mommie.body.y >= 6370){ 
+		else if(this.mommie.body.y >= 6360){ 
 			//console.log("Count: " + this.mommie.getCount());
 
 			game.state.start('Level03', true, false, 480, 96, this.mommie.getCount(), this.theme, this.theme2);
@@ -115,7 +118,7 @@ Level01.prototype = {
 	render: function() {
 		//game.debug.cameraInfo(game.camera, 32, 32);
 		//game.debug.spriteCoords(this.mommie, 32, 500);
-		game.debug.pointer(game.input.activePointer);
+		//game.debug.pointer(game.input.activePointer);
 		
 		//var zone = this.soundWaveEmitter.area;
 		//game.context.fillStyle = "rgba(0,0,255,0.5)";
